@@ -1,6 +1,7 @@
 package com.tencent.wxcloudrun.config;
 
 import com.tencent.wxcloudrun.contants.CommonConstant;
+import com.tencent.wxcloudrun.dto.ApiResponse;
 import com.tencent.wxcloudrun.exception.VoteException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

@@ -1,5 +1,7 @@
 package com.tencent.wxcloudrun.util;
 
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Maps;
 import com.tencent.wxcloudrun.contants.CommonConstant;
 import com.tencent.wxcloudrun.contants.ErrorEnum;
 import com.tencent.wxcloudrun.exception.VoteExceptionFactory;
@@ -7,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * TO-DO
@@ -18,7 +21,13 @@ public enum TokenUtil {
 
     INSTANCE;
 
-    public String getPhoneNum(String token) {
+    public String getPhoneNumByWX(String code) {
+        Map<String,String> paramMap = Maps.newHashMap();
+        paramMap.put("code",code);
+        return HttpUtil.doPost(CommonConstant.WX_GET_PHONE_NUM_URL, JSON.toJSONString(paramMap),Maps.newHashMap());
+    }
+
+    public String getPhoneNumByAuthToken(String token) {
         if (StringUtils.isEmpty(token)) {
             throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0001);
         }

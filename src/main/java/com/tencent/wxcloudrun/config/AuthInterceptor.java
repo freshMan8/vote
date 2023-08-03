@@ -28,16 +28,16 @@ public class AuthInterceptor implements HandlerInterceptor {
     private UserService userService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String token = request.getHeader(CommonConstant.TOKEN);
-        String phoneNum = TokenUtil.INSTANCE.getPhoneNum(token);
+        String phoneNum = TokenUtil.INSTANCE.getPhoneNumByAuthToken(token);
         User user = userService.getUserByPhoneNum(phoneNum);
         VoteContext.setSession(new AuthSession(user));
         return true;
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         //清除会话上下文环境
         VoteContext.remove();
     }

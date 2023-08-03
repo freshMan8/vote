@@ -18,6 +18,8 @@ public interface CommonConstant {
 
     String USER_INFO = "USER:INFO:KEY";
 
+    String WX_GET_PHONE_NUM_URL = "https://api.weixin.qq.com/wxa/business/getuserphonenumber?access_token=ACCESS_TOKEN";
+
     interface ErrorCode {
 
         //服务器错误

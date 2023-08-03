@@ -1,6 +1,9 @@
 package com.tencent.wxcloudrun.model;
 
+import com.google.common.collect.Maps;
 import lombok.Data;
+
+import java.util.Map;
 
 /**
  * TO-DO
@@ -14,6 +17,8 @@ public class AuthSession {
     private String name;
 
     private String phoneNum;
+
+    Map<String,Object> objectMap = Maps.newHashMap();
 
     public AuthSession(User user) {
         name = user.getUserName();
