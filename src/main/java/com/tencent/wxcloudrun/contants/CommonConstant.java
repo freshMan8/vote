@@ -19,19 +19,20 @@ public interface CommonConstant {
     String USER_INFO = "USER:INFO:KEY";
 
     interface ErrorCode {
+
         //服务器错误
-        String SVR = "500";
+        int SVR = 500;
 
         //逻辑错误
-        String LOGIC = "1600";
+        int LOGIC = 1600;
 
         // 数据校验错误
-        String DATA = "1301";
+        int DATA = 1301;
 
         // header 校验错误
-        String HEADER = "1302";
+        int HEADER = 1302;
 
         //管理员错误
-        String ADMIN_ERROR = "2401";
+        int ADMIN_ERROR = 2401;
     }
 }

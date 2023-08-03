@@ -1,12 +1,13 @@
 package com.tencent.wxcloudrun.config;
 
 import com.tencent.wxcloudrun.contants.CommonConstant;
-import com.tencent.wxcloudrun.redis.RedisService;
-import com.tencent.wxcloudrun.redis.RedissonLockService;
+import com.tencent.wxcloudrun.model.AuthSession;
+import com.tencent.wxcloudrun.model.User;
+import com.tencent.wxcloudrun.service.UserService;
 import com.tencent.wxcloudrun.util.TokenUtil;
+import com.tencent.wxcloudrun.util.VoteContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -24,15 +25,20 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthInterceptor implements HandlerInterceptor {
 
     @Autowired
-    private RedisService redisService;
+    private UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader(CommonConstant.TOKEN);
         String phoneNum = TokenUtil.INSTANCE.getPhoneNum(token);
-        String key = RedissonLockService.getLockKey(CommonConstant.USER_INFO,phoneNum);
-        Object obj = redisService.get(key);
-
+        User user = userService.getUserByPhoneNum(phoneNum);
+        VoteContext.setSession(new AuthSession(user));
         return true;
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        //清除会话上下文环境
+        VoteContext.remove();
     }
 }

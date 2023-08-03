@@ -15,5 +15,8 @@ public class AuthSession {
 
     private String phoneNum;
 
-    private String wechatNum;
+    public AuthSession(User user) {
+        name = user.getUserName();
+        phoneNum = user.getPhoneNum();
+    }
 }

@@ -16,7 +16,7 @@ spring:
     timeout: 30000
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_ADDRESS}/${MYSQL_DATABASE:springboot_demo}
+    url: jdbc:mysql://${MYSQL_ADDRESS}/${MYSQL_DATABASE:vote}
     username: ${MYSQL_USERNAME}
     password: ${MySQL_PASSWORD}
   mvc:

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencent.wxcloudrun.dao.UserMapper">
+    <select id="getEntity" parameterType="com.tencent.wxcloudrun.model.User" resultType="com.tencent.wxcloudrun.model.User">
+        select * from t_user
+        where 1 = 1
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="account != null and account != ''">
+            and account = #{account}
+        </if>
+        <if test="userName != null and userName != ''">
+            and user_name = #{userName}
+        </if>
+        <if test="phoneNum != null and phoneNum != ''">
+            and phone_num = #{phoneNum}
+        </if>
+        <if test="userType != null">
+            and user_type = #{userType}
+        </if>
+    </select>
+
+    <update id="updateEntity" parameterType="com.tencent.wxcloudrun.model.User">
+        update t_user set
+        <if test="account != null and account != ''">
+             account = #{account},
+        </if>
+        <if test="userName != null and userName != ''">
+             user_name = #{userName},
+        </if>
+        <if test="phoneNum != null and phoneNum != ''">
+             phone_num = #{phoneNum},
+        </if>
+        <if test="userType != null">
+             user_type = #{userType},
+        </if>
+        <if test="picUrl != null and picUrl != ''">
+            pic_url = #{picUrl},
+        </if>
+        updatedTime = now(),
+        updated_by= #{updatedBy}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEntity" parameterType="com.tencent.wxcloudrun.model.User">
+        delete from t_user
+        where 1 = 1
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="account != null and account != ''">
+            and account = #{account}
+        </if>
+        <if test="userName != null and userName != ''">
+            and user_name = #{userName}
+        </if>
+        <if test="phoneNum != null and phoneNum != ''">
+            and phone_num = #{phoneNum}
+        </if>
+        <if test="userType != null">
+            and user_type = #{userType}
+        </if>
+    </delete>
+
+    <insert id="insertEntity" parameterType="com.tencent.wxcloudrun.model.User">
+        insert into t_user(
+            `id`,
+            `account`,
+            `user_name`,
+            `phone_num`,
+            `pic_url`,
+            `user_type`,
+            `updated_time`,
+            `updated_by`,
+            `create_time`,
+            `create_by`
+        ) values (
+                  #{id},#{account},#{userName},#{phoneNum},#{picUrl},
+                  #{userType},now(),{updatedBy},now(),#{createBy}
+                )
+    </insert>
+</mapper>

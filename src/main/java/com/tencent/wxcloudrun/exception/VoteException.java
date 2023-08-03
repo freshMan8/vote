@@ -14,26 +14,26 @@ import org.apache.commons.lang3.StringUtils;
 @Data
 public class VoteException extends RuntimeException {
 
-    private String errCode;
+    private int errCode;
 
     private String errMsg;
 
     private Throwable causeThrowable;
 
 
-    public VoteException(String errCode, String errMsg) {
+    public VoteException(int errCode, String errMsg) {
         super(errMsg);
         this.errCode = errCode;
         this.errMsg = errMsg;
     }
 
-    public VoteException(String errCode, Throwable throwable) {
+    public VoteException(int errCode, Throwable throwable) {
         super(throwable);
         this.errCode = errCode;
         setCauseThrowable(throwable);
     }
 
-    public VoteException(String errCode, String errMsg, Throwable throwable) {
+    public VoteException(int errCode, String errMsg, Throwable throwable) {
         super(errMsg, throwable);
         this.errCode = errCode;
         this.errMsg = errMsg;
