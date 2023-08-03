@@ -29,10 +29,10 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String token = request.getHeader(CommonConstant.TOKEN);
-        String phoneNum = TokenUtil.INSTANCE.getPhoneNumByAuthToken(token);
-        User user = userService.getUserByPhoneNum(phoneNum);
-        VoteContext.setSession(new AuthSession(user));
+        //String token = request.getHeader(CommonConstant.TOKEN);
+        //String phoneNum = TokenUtil.INSTANCE.getPhoneNumByAuthToken(token);
+        //User user = userService.getUserByPhoneNum(phoneNum);
+        //VoteContext.setSession(new AuthSession(user));
         return true;
     }
 
