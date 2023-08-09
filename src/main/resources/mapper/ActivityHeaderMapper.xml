@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencent.wxcloudrun.dao.ActivityHeaderMapper">
+
+    <resultMap id="BaseResultMap" type="com.tencent.wxcloudrun.model.ActivityHeader" >
+        <result column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="pic_url" property="picUrl" />
+        <result column="sort" property="sort" />
+        <result column="sort_time" property="sortTime" />
+        <result column="participant_num" property="participantNum" />
+        <result column="vote_num" property="voteNum" />
+        <result column="visit_num" property="visitNum" />
+        <result column="activity_type" property="activityType" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+                title,
+                pic_url,
+                sort,
+                sort_time,
+                participant_num,
+                vote_num,
+                visit_num,
+                activity_type,
+                start_time,
+                end_time,
+                updated_time,
+                updated_by,
+                create_time,
+                create_by
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.tencent.wxcloudrun.model.ActivityHeader">
+        INSERT INTO activity_header
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != title and '' != title">
+                title,
+            </if>
+            <if test="null != picUrl and '' != picUrl">
+                pic_url,
+            </if>
+            <if test="null != sort and '' != sort">
+                sort,
+            </if>
+            <if test="null != sortTime and '' != sortTime">
+                sort_time,
+            </if>
+            <if test="null != participantNum and '' != participantNum">
+                participant_num,
+            </if>
+            <if test="null != voteNum and '' != voteNum">
+                vote_num,
+            </if>
+            <if test="null != visitNum and '' != visitNum">
+                visit_num,
+            </if>
+            <if test="null != activityType and '' != activityType">
+                activity_type,
+            </if>
+            <if test="null != startTime and '' != startTime">
+                start_time,
+            </if>
+            <if test="null != endTime and '' != endTime">
+                end_time,
+            </if>
+            <if test="null != updatedTime and '' != updatedTime">
+                updated_time,
+            </if>
+            <if test="null != updatedBy and '' != updatedBy">
+                updated_by,
+            </if>
+            <if test="null != createTime and '' != createTime">
+                create_time,
+            </if>
+            <if test="null != createBy and '' != createBy">
+                create_by
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != title and '' != title">
+                #{title},
+            </if>
+            <if test="null != picUrl and '' != picUrl">
+                #{picUrl},
+            </if>
+            <if test="null != sort and '' != sort">
+                #{sort},
+            </if>
+            <if test="null != sortTime and '' != sortTime">
+                #{sortTime},
+            </if>
+            <if test="null != participantNum and '' != participantNum">
+                #{participantNum},
+            </if>
+            <if test="null != voteNum and '' != voteNum">
+                #{voteNum},
+            </if>
+            <if test="null != visitNum and '' != visitNum">
+                #{visitNum},
+            </if>
+            <if test="null != activityType and '' != activityType">
+                #{activityType},
+            </if>
+            <if test="null != startTime and '' != startTime">
+                #{startTime},
+            </if>
+            <if test="null != endTime and '' != endTime">
+                #{endTime},
+            </if>
+            <if test="null != updatedTime and '' != updatedTime">
+                #{updatedTime},
+            </if>
+            <if test="null != updatedBy and '' != updatedBy">
+                #{updatedBy},
+            </if>
+            <if test="null != createTime and '' != createTime">
+                #{createTime},
+            </if>
+            <if test="null != createBy and '' != createBy">
+                #{createBy}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM activity_header
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.tencent.wxcloudrun.model.ActivityHeader">
+        UPDATE activity_header
+        <set>
+            <if test="null != title and '' != title">title = #{title},</if>
+            <if test="null != picUrl and '' != picUrl">pic_url = #{picUrl},</if>
+            <if test="null != sort and '' != sort">sort = #{sort},</if>
+            <if test="null != sortTime and '' != sortTime">sort_time = #{sortTime},</if>
+            <if test="null != participantNum and '' != participantNum">participant_num = #{participantNum},</if>
+            <if test="null != voteNum and '' != voteNum">vote_num = #{voteNum},</if>
+            <if test="null != visitNum and '' != visitNum">visit_num = #{visitNum},</if>
+            <if test="null != activityType and '' != activityType">activity_type = #{activityType},</if>
+            <if test="null != startTime and '' != startTime">start_time = #{startTime},</if>
+            <if test="null != endTime and '' != endTime">end_time = #{endTime},</if>
+            <if test="null != updatedTime and '' != updatedTime">updated_time = #{updatedTime},</if>
+            <if test="null != updatedBy and '' != updatedBy">updated_by = #{updatedBy},</if>
+            <if test="null != createTime and '' != createTime">create_time = #{createTime},</if>
+            <if test="null != createBy and '' != createBy">create_by = #{createBy}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM activity_header
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap" parameterType="com.tencent.wxcloudrun.model.ActivityHeader">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM activity_header
+        where 1= 1
+        <if test="null != id and '' != id">
+            and id = #{id}
+        </if>
+        <if test="null != title and '' != title">
+            and title = #{title}
+        </if>
+        <if test="null != picUrl and '' != picUrl">
+            and pic_url = #{picUrl}
+        </if>
+        <if test="null != sort and '' != sort">
+            and sort = #{sort}
+        </if>
+        <if test="null != sortTime and '' != sortTime">
+            and sort_time = #{sortTime}
+        </if>
+        <if test="null != participantNum and '' != participantNum">
+            and participant_num = #{participantNum}
+        </if>
+        <if test="null != voteNum and '' != voteNum">
+            and vote_num = #{voteNum}
+        </if>
+        <if test="null != visitNum and '' != visitNum">
+            and visit_num = #{visitNum}
+        </if>
+        <if test="null != activityType and '' != activityType">
+            and activity_type = #{activityType}
+        </if>
+        <if test="null != startTime and '' != startTime">
+            and start_time = #{startTime}
+        </if>
+        <if test="null != endTime and '' != endTime">
+            and end_time = #{endTime}
+        </if>
+        <if test="null != updatedTime and '' != updatedTime">
+            and updated_time = #{updatedTime}
+        </if>
+        <if test="null != updatedBy and '' != updatedBy">
+            and updated_by = #{updatedBy}
+        </if>
+        <if test="null != createTime and '' != createTime">
+            and create_time = #{createTime}
+        </if>
+        <if test="null != createBy and '' != createBy">
+            and create_by = #{createBy}
+        </if>
+    </select>
+</mapper>

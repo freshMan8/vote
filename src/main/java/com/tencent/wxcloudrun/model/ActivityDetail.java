@@ -5,12 +5,12 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 /**
- * @description 动态
+ * @description 活动参与明细表
  * @author lf
  * @date 2023-08-09
  */
 @Data
-public class News implements Serializable {
+public class ActivityDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -18,6 +18,31 @@ public class News implements Serializable {
      * 主键id
      */
     private Long id;
+
+    /**
+     * 活动主表id
+     */
+    private Long activityId;
+
+    /**
+     * 参与人id
+     */
+    private Long userId;
+
+    /**
+     * 参与人手机号
+     */
+    private String phoneNum;
+
+    /**
+     * 参与人收货地址
+     */
+    private String location;
+
+    /**
+     * 参与人收货人
+     */
+    private String name;
 
     /**
      * 主题
@@ -30,24 +55,19 @@ public class News implements Serializable {
     private String shortContext;
 
     /**
-     * 内容
-     */
-    private String context;
-
-    /**
      * 主题url
      */
     private String picUrl;
 
     /**
-     * 排序置顶
+     * 参赛编号
      */
-    private Integer sort;
+    private Integer orderNum;
 
     /**
-     * 置顶过期时间
+     * 投票数
      */
-    private Date sortTime;
+    private Integer voteNum;
 
     /**
      * 更新时间

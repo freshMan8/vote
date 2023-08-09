@@ -3,6 +3,7 @@ package com.tencent.wxcloudrun.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tencent.wxcloudrun.dao.NewsMapper;
+import com.tencent.wxcloudrun.dto.NewsRequest;
 import com.tencent.wxcloudrun.model.News;
 import com.tencent.wxcloudrun.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,9 @@ public class NewsServiceImpl implements NewsService {
     private NewsMapper newsMapper;
 
     @Override
-    public PageInfo<News> getNewsPage() {
+    public PageInfo<News> getNewsPage(NewsRequest request) {
+        News news = new News();
+        news.setTitle(request.getSearch());
         return PageHelper.startPage(1, 10,"create_time desc")
         .doSelectPageInfo(() -> newsMapper.getEntity(new News()));
     }

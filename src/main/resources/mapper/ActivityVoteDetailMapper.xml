@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencent.wxcloudrun.dao.ActivityVoteDetailMapper">
+
+    <resultMap id="BaseResultMap" type="com.tencent.wxcloudrun.model.ActivityVoteDetail" >
+        <result column="id" property="id" />
+        <result column="activity_detail_id" property="activityDetailId" />
+        <result column="user_id" property="userId" />
+        <result column="vote_num" property="voteNum" />
+        <result column="gift_type" property="giftType" />
+        <result column="vote_type" property="voteType" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+                activity_detail_id,
+                user_id,
+                vote_num,
+                gift_type,
+                vote_type,
+                updated_time,
+                updated_by,
+                create_time,
+                create_by
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.tencent.wxcloudrun.model.ActivityVoteDetail">
+        INSERT INTO activity_vote_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != activityDetailId and '' != activityDetailId">
+                activity_detail_id,
+            </if>
+            <if test="null != userId and '' != userId">
+                user_id,
+            </if>
+            <if test="null != voteNum and '' != voteNum">
+                vote_num,
+            </if>
+            <if test="null != giftType and '' != giftType">
+                gift_type,
+            </if>
+            <if test="null != voteType and '' != voteType">
+                vote_type,
+            </if>
+            <if test="null != updatedTime and '' != updatedTime">
+                updated_time,
+            </if>
+            <if test="null != updatedBy and '' != updatedBy">
+                updated_by,
+            </if>
+            <if test="null != createTime and '' != createTime">
+                create_time,
+            </if>
+            <if test="null != createBy and '' != createBy">
+                create_by
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != activityDetailId and '' != activityDetailId">
+                #{activityDetailId},
+            </if>
+            <if test="null != userId and '' != userId">
+                #{userId},
+            </if>
+            <if test="null != voteNum and '' != voteNum">
+                #{voteNum},
+            </if>
+            <if test="null != giftType and '' != giftType">
+                #{giftType},
+            </if>
+            <if test="null != voteType and '' != voteType">
+                #{voteType},
+            </if>
+            <if test="null != updatedTime and '' != updatedTime">
+                #{updatedTime},
+            </if>
+            <if test="null != updatedBy and '' != updatedBy">
+                #{updatedBy},
+            </if>
+            <if test="null != createTime and '' != createTime">
+                #{createTime},
+            </if>
+            <if test="null != createBy and '' != createBy">
+                #{createBy}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM activity_vote_detail
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.tencent.wxcloudrun.model.ActivityVoteDetail">
+        UPDATE activity_vote_detail
+        <set>
+            <if test="null != activityDetailId and '' != activityDetailId">activity_detail_id = #{activityDetailId},</if>
+            <if test="null != userId and '' != userId">user_id = #{userId},</if>
+            <if test="null != voteNum and '' != voteNum">vote_num = #{voteNum},</if>
+            <if test="null != giftType and '' != giftType">gift_type = #{giftType},</if>
+            <if test="null != voteType and '' != voteType">vote_type = #{voteType},</if>
+            <if test="null != updatedTime and '' != updatedTime">updated_time = #{updatedTime},</if>
+            <if test="null != updatedBy and '' != updatedBy">updated_by = #{updatedBy},</if>
+            <if test="null != createTime and '' != createTime">create_time = #{createTime},</if>
+            <if test="null != createBy and '' != createBy">create_by = #{createBy}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM activity_vote_detail
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM activity_vote_detail
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM activity_vote_detail
+    </select>
+
+</mapper>

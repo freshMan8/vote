@@ -1,6 +1,7 @@
 package com.tencent.wxcloudrun.service;
 
 import com.github.pagehelper.PageInfo;
+import com.tencent.wxcloudrun.dto.NewsRequest;
 import com.tencent.wxcloudrun.model.News;
 
 /**
@@ -11,5 +12,5 @@ import com.tencent.wxcloudrun.model.News;
  */
 public interface NewsService {
 
-    PageInfo<News> getNewsPage();
+    PageInfo<News> getNewsPage(NewsRequest request);
 }

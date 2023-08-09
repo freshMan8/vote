@@ -50,16 +50,15 @@ public class WebExceptionHandler {
         String delimiter = ",";
 
         String errMsg = "";
-        if (ex instanceof BindException) {
-            // 错误描述
-            errMsg = ((BindException) ex).getFieldErrors()
+        if (ex instanceof MethodArgumentNotValidException) {
+            errMsg = ((MethodArgumentNotValidException) ex).getBindingResult()
+                    .getFieldErrors()
                     .stream()
                     .map(FieldError::getDefaultMessage)
                     .collect(Collectors.joining(delimiter));
-        }
-        else if (ex instanceof MethodArgumentNotValidException) {
-            errMsg = ((MethodArgumentNotValidException) ex).getBindingResult()
-                    .getFieldErrors()
+        } else if (ex instanceof BindException) {
+            // 错误描述
+            errMsg = ((BindException) ex).getFieldErrors()
                     .stream()
                     .map(FieldError::getDefaultMessage)
                     .collect(Collectors.joining(delimiter));

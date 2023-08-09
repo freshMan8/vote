@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencent.wxcloudrun.dao.ActivityDetailMapper">
+
+    <resultMap id="BaseResultMap" type="com.tencent.wxcloudrun.model.ActivityDetail" >
+        <result column="id" property="id" />
+        <result column="activity_id" property="activityId" />
+        <result column="user_id" property="userId" />
+        <result column="phone_num" property="phoneNum" />
+        <result column="location" property="location" />
+        <result column="name" property="name" />
+        <result column="title" property="title" />
+        <result column="short_context" property="shortContext" />
+        <result column="pic_url" property="picUrl" />
+        <result column="order_num" property="orderNum" />
+        <result column="vote_num" property="voteNum" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+                activity_id,
+                user_id,
+                phone_num,
+                location,
+                name,
+                title,
+                short_context,
+                pic_url,
+                order_num,
+                vote_num,
+                updated_time,
+                updated_by,
+                create_time,
+                create_by
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.tencent.wxcloudrun.model.ActivityDetail">
+        INSERT INTO activity_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != activityId and '' != activityId">
+                activity_id,
+            </if>
+            <if test="null != userId and '' != userId">
+                user_id,
+            </if>
+            <if test="null != phoneNum and '' != phoneNum">
+                phone_num,
+            </if>
+            <if test="null != location and '' != location">
+                location,
+            </if>
+            <if test="null != name and '' != name">
+                name,
+            </if>
+            <if test="null != title and '' != title">
+                title,
+            </if>
+            <if test="null != shortContext and '' != shortContext">
+                short_context,
+            </if>
+            <if test="null != picUrl and '' != picUrl">
+                pic_url,
+            </if>
+            <if test="null != orderNum and '' != orderNum">
+                order_num,
+            </if>
+            <if test="null != voteNum and '' != voteNum">
+                vote_num,
+            </if>
+            <if test="null != updatedTime and '' != updatedTime">
+                updated_time,
+            </if>
+            <if test="null != updatedBy and '' != updatedBy">
+                updated_by,
+            </if>
+            <if test="null != createTime and '' != createTime">
+                create_time,
+            </if>
+            <if test="null != createBy and '' != createBy">
+                create_by
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != activityId and '' != activityId">
+                #{activityId},
+            </if>
+            <if test="null != userId and '' != userId">
+                #{userId},
+            </if>
+            <if test="null != phoneNum and '' != phoneNum">
+                #{phoneNum},
+            </if>
+            <if test="null != location and '' != location">
+                #{location},
+            </if>
+            <if test="null != name and '' != name">
+                #{name},
+            </if>
+            <if test="null != title and '' != title">
+                #{title},
+            </if>
+            <if test="null != shortContext and '' != shortContext">
+                #{shortContext},
+            </if>
+            <if test="null != picUrl and '' != picUrl">
+                #{picUrl},
+            </if>
+            <if test="null != orderNum and '' != orderNum">
+                #{orderNum},
+            </if>
+            <if test="null != voteNum and '' != voteNum">
+                #{voteNum},
+            </if>
+            <if test="null != updatedTime and '' != updatedTime">
+                #{updatedTime},
+            </if>
+            <if test="null != updatedBy and '' != updatedBy">
+                #{updatedBy},
+            </if>
+            <if test="null != createTime and '' != createTime">
+                #{createTime},
+            </if>
+            <if test="null != createBy and '' != createBy">
+                #{createBy}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM activity_detail
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.tencent.wxcloudrun.model.ActivityDetail">
+        UPDATE activity_detail
+        <set>
+            <if test="null != activityId and '' != activityId">activity_id = #{activityId},</if>
+            <if test="null != userId and '' != userId">user_id = #{userId},</if>
+            <if test="null != phoneNum and '' != phoneNum">phone_num = #{phoneNum},</if>
+            <if test="null != location and '' != location">location = #{location},</if>
+            <if test="null != name and '' != name">name = #{name},</if>
+            <if test="null != title and '' != title">title = #{title},</if>
+            <if test="null != shortContext and '' != shortContext">short_context = #{shortContext},</if>
+            <if test="null != picUrl and '' != picUrl">pic_url = #{picUrl},</if>
+            <if test="null != orderNum and '' != orderNum">order_num = #{orderNum},</if>
+            <if test="null != voteNum and '' != voteNum">vote_num = #{voteNum},</if>
+            <if test="null != updatedTime and '' != updatedTime">updated_time = #{updatedTime},</if>
+            <if test="null != updatedBy and '' != updatedBy">updated_by = #{updatedBy},</if>
+            <if test="null != createTime and '' != createTime">create_time = #{createTime},</if>
+            <if test="null != createBy and '' != createBy">create_by = #{createBy}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM activity_detail
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM activity_detail
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM activity_detail
+    </select>
+
+</mapper>
