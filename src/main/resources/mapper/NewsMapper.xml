@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencent.wxcloudrun.dao.NewsMapper">
+    <select id="getEntity" parameterType="com.tencent.wxcloudrun.model.News" resultType="com.tencent.wxcloudrun.model.News">
+        select * from t_news
+        where 1 = 1
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="title != null and title != ''">
+            and `title` like concat('%',#{title},'%')
+        </if>
+        <if test="shortContext != null and shortContext != ''">
+            and short_context like concat('%',#{shortContext},'%')
+        </if>
+    </select>
+
+    <update id="updateEntity" parameterType="com.tencent.wxcloudrun.model.News">
+        update t_news set
+        <if test="title != null and title != ''">
+            title = #{title},
+        </if>
+        <if test="shortContext != null and shortContext != ''">
+            short_context = #{shortContext},
+        </if>
+        <if test="context != null and context != ''">
+            context = #{context},
+        </if>
+        <if test="sortTime != null">
+            `sort_time` = #{sortTime},
+        </if>
+        <if test="sort != null">
+            `sort` = #{sort},
+        </if>
+        <if test="picUrl != null and picUrl != ''">
+            pic_url = #{picUrl},
+        </if>
+        updatedTime = now(),
+        updated_by= #{updatedBy}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEntity" parameterType="com.tencent.wxcloudrun.model.News">
+        delete from t_news
+        where 1 = 1
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        limit 1
+    </delete>
+
+    <insert id="insertEntity" parameterType="com.tencent.wxcloudrun.model.User">
+        insert into t_user(
+            `title`,
+            `short_context`,
+            `context`,
+            `pic_url`,
+            `sort`,
+            `sort_time`,
+            `updated_time`,
+            `updated_by`,
+            `create_time`,
+            `create_by`
+        ) values (
+                  #{title},#{shortContext},#{context},#{picUrl},
+                  #{sort},#{sortTime},now(),{updatedBy},now(),#{createBy}
+                )
+    </insert>
+</mapper>

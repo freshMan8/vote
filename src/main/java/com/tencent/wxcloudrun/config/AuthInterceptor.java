@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.config;
 
+import com.tencent.wxcloudrun.annotation.OpenApi;
 import com.tencent.wxcloudrun.contants.CommonConstant;
 import com.tencent.wxcloudrun.model.AuthSession;
 import com.tencent.wxcloudrun.model.User;
@@ -9,6 +10,7 @@ import com.tencent.wxcloudrun.util.VoteContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,10 +31,21 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        //String token = request.getHeader(CommonConstant.TOKEN);
-        //String phoneNum = TokenUtil.INSTANCE.getPhoneNumByAuthToken(token);
-        //User user = userService.getUserByPhoneNum(phoneNum);
-        //VoteContext.setSession(new AuthSession(user));
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            //获取方法权限注解
+            OpenApi openApi = handlerMethod.getMethodAnnotation(OpenApi.class);
+            //判断是否是开放接口
+            if (openApi != null) {
+                return true;
+            }
+        } else {
+            return true;
+        }
+        String token = request.getHeader(CommonConstant.TOKEN);
+        String phoneNum = TokenUtil.INSTANCE.getPhoneNumByAuthToken(token);
+        User user = userService.getUserByPhoneNum(phoneNum);
+        VoteContext.setSession(new AuthSession(user));
         return true;
     }
 

@@ -8,7 +8,7 @@ package com.tencent.wxcloudrun.contants;
  */
 public interface CommonConstant {
 
-    String AES128_PUBLIC_KEY = "86791868679186";
+    String AES128_PUBLIC_KEY = "8679186867918600";
 
     String TOKEN = "token";
 

@@ -65,7 +65,6 @@
 
     <insert id="insertEntity" parameterType="com.tencent.wxcloudrun.model.User">
         insert into t_user(
-            `id`,
             `account`,
             `user_name`,
             `phone_num`,
@@ -76,7 +75,7 @@
             `create_time`,
             `create_by`
         ) values (
-                  #{id},#{account},#{userName},#{phoneNum},#{picUrl},
+                  #{account},#{userName},#{phoneNum},#{picUrl},
                   #{userType},now(),{updatedBy},now(),#{createBy}
                 )
     </insert>

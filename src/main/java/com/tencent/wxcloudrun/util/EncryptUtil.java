@@ -27,11 +27,11 @@ public class EncryptUtil {
     public static String Encrypt(String sSrc) {
         try {
             String sKey = CommonConstant.AES128_PUBLIC_KEY;
-            byte[] raw = sKey.getBytes("utf-8");
+            byte[] raw = sKey.getBytes(StandardCharsets.UTF_8);
             SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
-            byte[] encrypted = cipher.doFinal(sSrc.getBytes("utf-8"));
+            byte[] encrypted = cipher.doFinal(sSrc.getBytes(StandardCharsets.UTF_8));
 
             return Base64.encodeBase64String(encrypted);
         } catch (Exception e) {

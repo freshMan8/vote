@@ -1,9 +1,13 @@
 package com.tencent.wxcloudrun.controller;
 
+import com.tencent.wxcloudrun.annotation.OpenApi;
 import com.tencent.wxcloudrun.dto.ApiResponse;
+import com.tencent.wxcloudrun.dto.LoginRequest;
 import com.tencent.wxcloudrun.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,8 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/passport")
 public class AuthController {
 
-    @GetMapping(value = "/login")
-    public ApiResponse loginByCode(@RequestParam("code") String code) {
-        return ApiResponse.ok(TokenUtil.INSTANCE.getPhoneNumByWX(code));
+    @PostMapping(value = "/login")
+    @OpenApi
+    public ApiResponse loginByCode(@RequestBody LoginRequest request) {
+        return ApiResponse.ok(TokenUtil.INSTANCE.getPhoneNumByWX(request.getCode()));
     }
 }
