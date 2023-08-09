@@ -49,6 +49,8 @@ public class News implements Serializable {
      */
     private Date sortTime;
 
+    private String type;
+
     /**
      * 更新时间
      */

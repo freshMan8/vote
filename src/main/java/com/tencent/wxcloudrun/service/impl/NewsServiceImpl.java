@@ -25,7 +25,7 @@ public class NewsServiceImpl implements NewsService {
     public PageInfo<News> getNewsPage(NewsRequest request) {
         News news = new News();
         news.setTitle(request.getSearch());
-        return PageHelper.startPage(1, 10,"create_time desc")
-        .doSelectPageInfo(() -> newsMapper.getEntity(new News()));
+        return PageHelper.startPage(1, 100,"create_time desc")
+                .doSelectPageInfo(() -> newsMapper.getEntity(news));
     }
 }
