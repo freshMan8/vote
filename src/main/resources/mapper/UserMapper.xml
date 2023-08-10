@@ -76,7 +76,7 @@
             `create_by`
         ) values (
                   #{account},#{userName},#{phoneNum},#{picUrl},
-                  #{userType},now(),{updatedBy},now(),#{createBy}
+                  #{userType},now(),#{updatedBy},now(),#{createBy}
                 )
     </insert>
 </mapper>
