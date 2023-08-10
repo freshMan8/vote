@@ -21,6 +21,8 @@ public enum ErrorEnum {
     VOTE_ERROR_0005(CommonConstant.ErrorCode.DATA,"参数校验失败"),
 
     VOTE_ERROR_0006(CommonConstant.ErrorCode.DATA,"数据不存在或已被删除"),
+
+    VOTE_ERROR_0007(CommonConstant.ErrorCode.DATA,"登录失败，请稍后再试"),
     ;
 
     @Getter
