@@ -20,6 +20,12 @@ public interface CommonConstant {
 
     String WX_GET_PHONE_NUM_URL = "http://api.weixin.qq.com/wxa/business/getuserphonenumber";
 
+    interface UserType {
+        int ROBOT = 0;
+
+        int REAL = 1;
+    }
+
     interface ErrorCode {
 
         //服务器错误

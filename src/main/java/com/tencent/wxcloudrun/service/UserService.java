@@ -11,4 +11,6 @@ import com.tencent.wxcloudrun.model.User;
 public interface UserService {
 
     User getUserByPhoneNum(String phoneNum);
+
+    User createUserByPhone(String phone);
 }

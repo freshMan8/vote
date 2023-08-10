@@ -2,6 +2,8 @@ package com.tencent.wxcloudrun.config;
 
 import com.tencent.wxcloudrun.annotation.OpenApi;
 import com.tencent.wxcloudrun.contants.CommonConstant;
+import com.tencent.wxcloudrun.contants.ErrorEnum;
+import com.tencent.wxcloudrun.exception.VoteExceptionFactory;
 import com.tencent.wxcloudrun.model.AuthSession;
 import com.tencent.wxcloudrun.model.User;
 import com.tencent.wxcloudrun.service.UserService;
@@ -45,6 +47,9 @@ public class AuthInterceptor implements HandlerInterceptor {
         String token = request.getHeader(CommonConstant.TOKEN);
         String phoneNum = TokenUtil.INSTANCE.getPhoneNumByAuthToken(token);
         User user = userService.getUserByPhoneNum(phoneNum);
+        if (user == null) {
+            throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0003);
+        }
         VoteContext.setSession(new AuthSession(user));
         return true;
     }

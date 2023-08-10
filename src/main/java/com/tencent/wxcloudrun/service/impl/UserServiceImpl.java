@@ -38,10 +38,28 @@ public class UserServiceImpl implements UserService {
         userParam.setPhoneNum(phoneNum);
         List<User> userList = userMapper.getEntity(userParam);
         if (CollectionUtils.isEmpty(userList)) {
-            throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0003);
+            return null;
         }
         User user = userList.get(0);
         redisService.set(key,user);
         return user;
+    }
+
+    @Override
+    public User createUserByPhone(String phone) {
+        User dbUser = getUserByPhoneNum(phone);
+        if (dbUser == null) {
+            User user = new User();
+            user.setPhoneNum(phone);
+            user.setAccount(phone);
+            String result = StringUtils.overlay(phone, "****", 3, 7);
+            user.setUserName("用户"+result);
+            user.setUserType(CommonConstant.UserType.REAL);
+            user.setCreateBy("admin");
+            user.setUpdatedBy("admin");
+            userMapper.insertEntity(user);
+            dbUser = user;
+        }
+        return dbUser;
     }
 }

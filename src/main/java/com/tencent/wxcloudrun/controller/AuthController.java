@@ -4,9 +4,12 @@ import com.tencent.wxcloudrun.annotation.OpenApi;
 import com.tencent.wxcloudrun.dto.ApiResponse;
 import com.tencent.wxcloudrun.dto.AuthResponse;
 import com.tencent.wxcloudrun.dto.LoginRequest;
+import com.tencent.wxcloudrun.model.User;
+import com.tencent.wxcloudrun.service.UserService;
 import com.tencent.wxcloudrun.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/passport")
 public class AuthController {
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping(value = "/login")
     @OpenApi
     public ApiResponse loginByCode(@RequestBody LoginRequest request) {
@@ -34,6 +40,10 @@ public class AuthController {
         if (StringUtils.isNotEmpty(token)) {
             authResponse.setToken(token);
             authResponse.setSuccess(true);
+            String phoneNum = TokenUtil.INSTANCE.getPhoneNumByAuthToken(token);
+            User user = userService.createUserByPhone(phoneNum);
+            authResponse.setId(user.getId());
+            authResponse.setName(user.getUserName());
         }
         return ApiResponse.ok(authResponse);
     }
