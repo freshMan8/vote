@@ -28,7 +28,7 @@
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.tencent.wxcloudrun.model.ActivityContextDetail">
-        INSERT INTO activity_contexdetail
+        INSERT INTO t_activity_context_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="null != activityId and '' != activityId">
                 activity_id,
@@ -84,12 +84,12 @@
     </insert>
 
     <delete id="delete" >
-        DELETE FROM activity_contexdetail
+        DELETE FROM t_activity_context_detail
         WHERE id = #{id}
     </delete>
 
     <update id="update" parameterType="com.tencent.wxcloudrun.model.ActivityContextDetail">
-        UPDATE activity_contexdetail
+        UPDATE t_activity_context_detail
         <set>
             <if test="null != activityId and '' != activityId">activity_id = #{activityId},</if>
             <if test="null != context and '' != context">context = #{context},</if>
@@ -106,13 +106,13 @@
 
     <select id="load" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
-        FROM activity_contexdetail
+        FROM t_activity_context_detail
         WHERE id = #{id}
     </select>
 
     <select id="pageList" resultMap="BaseResultMap" parameterType="com.tencent.wxcloudrun.model.ActivityContextDetail">
         SELECT <include refid="Base_Column_List" />
-        FROM activity_contexdetail
+        FROM t_activity_context_detail
         where 1 = 1
         <if test="null != activityId and '' != activityId">
             and activity_id = #{activityId}
