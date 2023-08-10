@@ -87,5 +87,18 @@ CREATE TABLE `t_activity_vote_detail` (
                                           PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='活动投票详情';
 
+CREATE TABLE `t_news_detail` (
+                                 `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
+                                 `news_id` bigint NOT NULL COMMENT '动态ID',
+                                 `context` longtext DEFAULT NULL COMMENT '内容',
+                                 `type` varchar(32) DEFAULT 'news' COMMENT '类型',
+                                 `orders` int NOT NULL DEFAULT 1 COMMENT '排序',
+                                 `updated_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                 `updated_by` varchar(64) NOT NULL COMMENT '更新人',
+                                 `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                 `create_by` varchar(64) NOT NULL COMMENT '创建人',
+                                 PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='动态详情';
+
 
 

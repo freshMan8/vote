@@ -49,8 +49,8 @@
         limit 1
     </delete>
 
-    <insert id="insertEntity" parameterType="com.tencent.wxcloudrun.model.User">
-        insert into t_user(
+    <insert id="insertEntity" parameterType="com.tencent.wxcloudrun.model.News">
+        insert into t_news(
             `title`,
             `short_context`,
             `context`,
@@ -66,4 +66,8 @@
                   #{sort},#{sortTime},now(),{updatedBy},now(),#{createBy}
                 )
     </insert>
+
+    <select id="getEntityById" resultType="com.tencent.wxcloudrun.model.News">
+        select * from t_news where id = #{id}
+    </select>
 </mapper>

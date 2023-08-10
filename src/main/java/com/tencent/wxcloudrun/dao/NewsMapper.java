@@ -21,4 +21,6 @@ public interface NewsMapper {
     Integer deleteEntity(News news);
 
     Integer insertEntity(News news);
+
+    News getEntityById(Long id);
 }

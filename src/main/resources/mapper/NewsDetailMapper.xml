@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencent.wxcloudrun.dao.NewsDetailMapper">
+
+    <resultMap id="BaseResultMap" type="com.tencent.wxcloudrun.model.NewsDetail" >
+        <result column="id" property="id" />
+        <result column="news_id" property="newsId" />
+        <result column="context" property="context" />
+        <result column="type" property="type" />
+        <result column="orders" property="orders" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+                news_id,
+                context,
+                type,
+                orders,
+                updated_time,
+                updated_by,
+                create_time,
+                create_by
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.tencent.wxcloudrun.model.NewsDetail">
+        INSERT INTO t_news_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != newsId and '' != newsId">
+                news_id,
+            </if>
+            <if test="null != context and '' != context">
+                context,
+            </if>
+            <if test="null != type and '' != type">
+                type,
+            </if>
+            <if test="null != orders and '' != orders">
+                orders,
+            </if>
+            <if test="null != updatedTime and '' != updatedTime">
+                updated_time,
+            </if>
+            <if test="null != updatedBy and '' != updatedBy">
+                updated_by,
+            </if>
+            <if test="null != createTime and '' != createTime">
+                create_time,
+            </if>
+            <if test="null != createBy and '' != createBy">
+                create_by
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != newsId and '' != newsId">
+                #{newsId},
+            </if>
+            <if test="null != context and '' != context">
+                #{context},
+            </if>
+            <if test="null != type and '' != type">
+                #{type},
+            </if>
+            <if test="null != orders and '' != orders">
+                #{orders},
+            </if>
+            <if test="null != updatedTime and '' != updatedTime">
+                #{updatedTime},
+            </if>
+            <if test="null != updatedBy and '' != updatedBy">
+                #{updatedBy},
+            </if>
+            <if test="null != createTime and '' != createTime">
+                #{createTime},
+            </if>
+            <if test="null != createBy and '' != createBy">
+                #{createBy}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM t_news_detail
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.tencent.wxcloudrun.model.NewsDetail">
+        UPDATE t_news_detail
+        <set>
+            <if test="null != newsId and '' != newsId">news_id = #{newsId},</if>
+            <if test="null != context and '' != context">context = #{context},</if>
+            <if test="null != type and '' != type">type = #{type},</if>
+            <if test="null != orders and '' != orders">orders = #{orders},</if>
+            <if test="null != updatedTime and '' != updatedTime">updated_time = #{updatedTime},</if>
+            <if test="null != updatedBy and '' != updatedBy">updated_by = #{updatedBy},</if>
+            <if test="null != createTime and '' != createTime">create_time = #{createTime},</if>
+            <if test="null != createBy and '' != createBy">create_by = #{createBy}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM t_news_detail
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap" parameterType="com.tencent.wxcloudrun.model.NewsDetail">
+        SELECT <include refid="Base_Column_List" />
+        FROM t_news_detail
+        where 1 = 1
+        <if test="null != newsId and '' != newsId">
+            and news_id = #{newsId}
+        </if>
+        <if test="null != type and '' != type">
+            and `type` = #{type}
+        </if>
+        <if test="null != orders and '' != orders">
+            and orders = #{orders}
+        </if>
+    </select>
+
+
+</mapper>

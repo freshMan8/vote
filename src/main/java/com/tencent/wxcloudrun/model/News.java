@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -47,6 +48,7 @@ public class News implements Serializable {
     /**
      * 置顶过期时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date sortTime;
 
     private String type;
@@ -54,6 +56,7 @@ public class News implements Serializable {
     /**
      * 更新时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updatedTime;
 
     /**
@@ -64,6 +67,7 @@ public class News implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**

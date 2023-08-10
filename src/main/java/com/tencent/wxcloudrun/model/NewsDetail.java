@@ -6,12 +6,12 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 /**
- * @description 活动投票详情
+ * @description 动态详情
  * @author lf
- * @date 2023-08-09
+ * @date 2023-08-10
  */
 @Data
-public class ActivityVoteDetail implements Serializable {
+public class NewsDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,29 +21,24 @@ public class ActivityVoteDetail implements Serializable {
     private Long id;
 
     /**
-     * 活动明细表id
+     * 动态id
      */
-    private Long activityDetailId;
+    private Long newsId;
 
     /**
-     * 投票人id
+     * 内容
      */
-    private Long userId;
+    private String context;
 
     /**
-     * 投票数
+     * 类型
      */
-    private Integer voteNum;
+    private String type;
 
     /**
-     * 礼物类型
+     * 排序
      */
-    private Integer giftType;
-
-    /**
-     * 投票类型 0 为机器人 1为正常用户
-     */
-    private Integer voteType;
+    private Integer orders;
 
     /**
      * 更新时间
@@ -66,5 +61,4 @@ public class ActivityVoteDetail implements Serializable {
      * 创建人
      */
     private String createBy;
-
 }
