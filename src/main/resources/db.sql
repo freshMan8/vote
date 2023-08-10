@@ -41,6 +41,7 @@ CREATE TABLE `t_activity_header` (
                                      `vote_num` int NOT NULL DEFAULT 0 COMMENT '投票数',
                                      `visit_num` int NOT NULL DEFAULT 0 COMMENT '访问数',
                                      `activity_type` varchar(64) NOT NULL COMMENT '活动类型',
+                                     `vote_thyme` int NOT NULL DEFAULT 0 COMMENT '主题类型',
                                      `start_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
                                      `end_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '结束时间',
                                      `updated_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',

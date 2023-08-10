@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.dto;
 
+import com.tencent.wxcloudrun.model.ActivityContextDetail;
 import com.tencent.wxcloudrun.model.ActivityDetail;
 import com.tencent.wxcloudrun.model.ActivityHeader;
 import lombok.Data;
@@ -16,4 +17,6 @@ import java.util.List;
 public class ActivityDetailResponse extends ActivityHeader {
 
     private List<ActivityDetail> list;
+
+    private List<ActivityContextDetail> contextDetails;
 }

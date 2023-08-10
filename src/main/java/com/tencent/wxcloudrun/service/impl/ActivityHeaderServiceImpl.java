@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.tencent.wxcloudrun.contants.ErrorEnum;
+import com.tencent.wxcloudrun.dao.ActivityContextDetailMapper;
 import com.tencent.wxcloudrun.dao.ActivityDetailMapper;
 import com.tencent.wxcloudrun.dao.ActivityHeaderMapper;
 import com.tencent.wxcloudrun.dto.ActivityDetailRequest;
@@ -12,6 +13,7 @@ import com.tencent.wxcloudrun.dto.ActivityDetailResponse;
 import com.tencent.wxcloudrun.dto.ActivityRequest;
 import com.tencent.wxcloudrun.dto.VoteResponse;
 import com.tencent.wxcloudrun.exception.VoteExceptionFactory;
+import com.tencent.wxcloudrun.model.ActivityContextDetail;
 import com.tencent.wxcloudrun.model.ActivityDetail;
 import com.tencent.wxcloudrun.model.ActivityHeader;
 import com.tencent.wxcloudrun.service.ActivityHeaderService;
@@ -34,6 +36,9 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
 
     @Autowired
     private ActivityDetailMapper activityDetailMapper;
+
+    @Autowired
+    private ActivityContextDetailMapper activityContextDetailMapper;
 
     @Override
     public PageInfo<VoteResponse> getList(ActivityRequest request) {
@@ -61,6 +66,10 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
         param.setActivityId(header.getId());
         List<ActivityDetail> list = activityDetailMapper.pageList(param);
         response.setList(list);
+        ActivityContextDetail detailParam = new ActivityContextDetail();
+        detailParam.setActivityId(request.getId());
+        List<ActivityContextDetail> details = activityContextDetailMapper.pageList(detailParam);
+        response.setContextDetails(details);
         return response;
     }
 }

@@ -63,6 +63,11 @@ public class ActivityHeader implements Serializable {
     private String activityType;
 
     /**
+     * 主题类型
+     **/
+    private Integer voteThyme;
+
+    /**
      * 开始时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
