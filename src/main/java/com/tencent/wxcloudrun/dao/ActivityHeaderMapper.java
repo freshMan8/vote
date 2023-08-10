@@ -41,7 +41,7 @@ public interface ActivityHeaderMapper {
      * @author lf
      * @date 2023/08/09
      **/
-    ActivityHeader load(int id);
+    ActivityHeader load(long id);
 
     /**
      * 查询 分页查询

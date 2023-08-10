@@ -19,6 +19,8 @@ public enum ErrorEnum {
     VOTE_ERROR_0004(CommonConstant.ErrorCode.DATA,"动态已被删除"),
 
     VOTE_ERROR_0005(CommonConstant.ErrorCode.DATA,"参数校验失败"),
+
+    VOTE_ERROR_0006(CommonConstant.ErrorCode.DATA,"数据不存在或已被删除"),
     ;
 
     @Getter

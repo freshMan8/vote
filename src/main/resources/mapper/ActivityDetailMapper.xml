@@ -27,7 +27,7 @@
                 user_id,
                 phone_num,
                 location,
-                name,
+                `name`,
                 title,
                 short_context,
                 pic_url,
@@ -40,7 +40,7 @@
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.tencent.wxcloudrun.model.ActivityDetail">
-        INSERT INTO activity_detail
+        INSERT INTO t_activity_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="null != activityId and '' != activityId">
                 activity_id,
@@ -55,7 +55,7 @@
                 location,
             </if>
             <if test="null != name and '' != name">
-                name,
+                `name`,
             </if>
             <if test="null != title and '' != title">
                 title,
@@ -132,18 +132,18 @@
     </insert>
 
     <delete id="delete" >
-        DELETE FROM activity_detail
+        DELETE FROM t_activity_detail
         WHERE id = #{id}
     </delete>
 
     <update id="update" parameterType="com.tencent.wxcloudrun.model.ActivityDetail">
-        UPDATE activity_detail
+        UPDATE t_activity_detail
         <set>
             <if test="null != activityId and '' != activityId">activity_id = #{activityId},</if>
             <if test="null != userId and '' != userId">user_id = #{userId},</if>
             <if test="null != phoneNum and '' != phoneNum">phone_num = #{phoneNum},</if>
             <if test="null != location and '' != location">location = #{location},</if>
-            <if test="null != name and '' != name">name = #{name},</if>
+            <if test="null != name and '' != name">`name` = #{name},</if>
             <if test="null != title and '' != title">title = #{title},</if>
             <if test="null != shortContext and '' != shortContext">short_context = #{shortContext},</if>
             <if test="null != picUrl and '' != picUrl">pic_url = #{picUrl},</if>
@@ -160,19 +160,39 @@
 
     <select id="load" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
-        FROM activity_detail
+        FROM t_activity_detail
         WHERE id = #{id}
     </select>
 
-    <select id="pageList" resultMap="BaseResultMap">
+    <select id="pageList" resultMap="BaseResultMap" parameterType="com.tencent.wxcloudrun.model.ActivityDetail">
         SELECT <include refid="Base_Column_List" />
-        FROM activity_detail
-        LIMIT #{offset}, #{pageSize}
-    </select>
-
-    <select id="pageListCount" resultType="java.lang.Integer">
-        SELECT count(1)
-        FROM activity_detail
+        FROM t_activity_detail
+        where 1 = 1
+        <if test="null != activityId and '' != activityId">
+            and activity_id = #{activityId}
+        </if>
+        <if test="null != userId and '' != userId">
+            and user_id = #{userId}
+        </if>
+        <if test="null != phoneNum and '' != phoneNum">
+          and phone_num = #{phoneNum}
+        </if>
+        <if test="null != name and '' != name">
+            and `name` = #{name}
+        </if>
+        <if test="null != title and '' != title">
+            and title = #{title}
+        </if>
+        <if test="null != shortContext and '' != shortContext">
+            and short_context = #{shortContext}
+        </if>
+        <if test="null != orderNum and '' != orderNum">
+            and order_num = #{orderNum}
+        </if>
+        <if test="null != voteNum and '' != voteNum">
+            and vote_num = #{voteNum}
+        </if>
+        order by order_num
     </select>
 
 </mapper>

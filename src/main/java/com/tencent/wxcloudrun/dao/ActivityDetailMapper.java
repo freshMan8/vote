@@ -48,13 +48,5 @@ public interface ActivityDetailMapper {
      * @author lf
      * @date 2023/08/09
      **/
-    List<ActivityDetail> pageList(int offset, int pagesize);
-
-    /**
-     * 查询 分页查询 count
-     * @author lf
-     * @date 2023/08/09
-     **/
-    int pageListCount(int offset,int pagesize);
-
+    List<ActivityDetail> pageList(ActivityDetail activityDetail);
 }

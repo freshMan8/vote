@@ -11,5 +11,5 @@ import lombok.Data;
 @Data
 public class ActivityDetailRequest {
 
-    private Long activityId;
+    private Long id;
 }

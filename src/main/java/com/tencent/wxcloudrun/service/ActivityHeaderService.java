@@ -1,6 +1,8 @@
 package com.tencent.wxcloudrun.service;
 
 import com.github.pagehelper.PageInfo;
+import com.tencent.wxcloudrun.dto.ActivityDetailRequest;
+import com.tencent.wxcloudrun.dto.ActivityDetailResponse;
 import com.tencent.wxcloudrun.dto.ActivityRequest;
 import com.tencent.wxcloudrun.dto.VoteResponse;
 import com.tencent.wxcloudrun.model.ActivityHeader;
@@ -16,4 +18,6 @@ import java.util.List;
 public interface ActivityHeaderService {
 
     PageInfo<VoteResponse> getList(ActivityRequest request);
+
+    ActivityDetailResponse getDetailById(ActivityDetailRequest request);
 }

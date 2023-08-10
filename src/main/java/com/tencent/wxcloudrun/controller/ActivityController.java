@@ -1,6 +1,7 @@
 package com.tencent.wxcloudrun.controller;
 
 import com.tencent.wxcloudrun.annotation.OpenApi;
+import com.tencent.wxcloudrun.dto.ActivityDetailRequest;
 import com.tencent.wxcloudrun.dto.ActivityRequest;
 import com.tencent.wxcloudrun.dto.ApiResponse;
 import com.tencent.wxcloudrun.service.ActivityHeaderService;
@@ -27,5 +28,11 @@ public class ActivityController {
     @OpenApi
     public ApiResponse getList(@RequestBody ActivityRequest request) {
         return ApiResponse.ok(activityHeaderService.getList(request));
+    }
+
+    @PostMapping(value = "/view")
+    @OpenApi
+    public ApiResponse getDetailById(@RequestBody ActivityDetailRequest request) {
+        return ApiResponse.ok(activityHeaderService.getDetailById(request));
     }
 }
