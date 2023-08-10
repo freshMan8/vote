@@ -40,7 +40,7 @@
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.tencent.wxcloudrun.model.ActivityHeader">
-        INSERT INTO activity_header
+        INSERT INTO t_activity_header
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="null != title and '' != title">
                 title,
@@ -132,12 +132,12 @@
     </insert>
 
     <delete id="delete" >
-        DELETE FROM activity_header
+        DELETE FROM t_activity_header
         WHERE id = #{id}
     </delete>
 
     <update id="update" parameterType="com.tencent.wxcloudrun.model.ActivityHeader">
-        UPDATE activity_header
+        UPDATE t_activity_header
         <set>
             <if test="null != title and '' != title">title = #{title},</if>
             <if test="null != picUrl and '' != picUrl">pic_url = #{picUrl},</if>
@@ -160,14 +160,14 @@
 
     <select id="load" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
-        FROM activity_header
+        FROM t_activity_header
         WHERE id = #{id}
     </select>
 
     <select id="pageList" resultMap="BaseResultMap" parameterType="com.tencent.wxcloudrun.model.ActivityHeader">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM activity_header
+        FROM t_activity_header
         where 1= 1
         <if test="null != id and '' != id">
             and id = #{id}

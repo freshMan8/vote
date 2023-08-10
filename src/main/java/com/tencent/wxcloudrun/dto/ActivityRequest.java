@@ -11,5 +11,5 @@ import lombok.Data;
 @Data
 public class ActivityRequest {
 
-    private String activityType;
+    private String sortVal;
 }
