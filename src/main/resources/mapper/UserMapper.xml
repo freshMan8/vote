@@ -24,7 +24,7 @@
     <update id="updateEntity" parameterType="com.tencent.wxcloudrun.model.User">
         update t_user set
         <if test="account != null and account != ''">
-             account = #{account},
+             `account` = #{account},
         </if>
         <if test="userName != null and userName != ''">
              user_name = #{userName},
@@ -38,7 +38,7 @@
         <if test="picUrl != null and picUrl != ''">
             pic_url = #{picUrl},
         </if>
-        updatedTime = now(),
+        updated_time = now(),
         updated_by= #{updatedBy}
         where id = #{id}
     </update>
