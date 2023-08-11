@@ -52,7 +52,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "edit_base")
-    public ApiResponse updateUser(EditUserRequest request) {
+    public ApiResponse updateUser(@RequestBody EditUserRequest request) {
         return ApiResponse.ok(userService.updateUser(request));
     }
 }
