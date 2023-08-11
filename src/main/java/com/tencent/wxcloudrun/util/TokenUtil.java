@@ -49,11 +49,15 @@ public enum TokenUtil {
         throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0001);
     }
 
-    public String generateToken(String phoneNum) {
+    public static String generateToken(String phoneNum) {
         return EncryptUtil.Encrypt(buildToken(phoneNum));
     }
 
-    public String buildToken(String phoneNum) {
+    public static void main(String[] args) {
+        System.out.println(generateToken("18727582327"));
+    }
+
+    public static String buildToken(String phoneNum) {
         String date = DateFormatUtils.format(new Date(),CommonConstant.DATE_FOMATE);
         return phoneNum + CommonConstant.SPLIT_SEQ + date;
     }

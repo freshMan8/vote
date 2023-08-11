@@ -18,9 +18,12 @@ public class AuthSession {
 
     private String phoneNum;
 
+    private Long id;
+
     Map<String,Object> objectMap = Maps.newHashMap();
 
     public AuthSession(User user) {
+        id = user.getId();
         name = user.getUserName();
         phoneNum = user.getPhoneNum();
     }

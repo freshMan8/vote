@@ -3,6 +3,7 @@ package com.tencent.wxcloudrun.controller;
 import com.tencent.wxcloudrun.annotation.OpenApi;
 import com.tencent.wxcloudrun.dto.ApiResponse;
 import com.tencent.wxcloudrun.dto.AuthResponse;
+import com.tencent.wxcloudrun.dto.EditUserRequest;
 import com.tencent.wxcloudrun.dto.LoginRequest;
 import com.tencent.wxcloudrun.model.User;
 import com.tencent.wxcloudrun.service.UserService;
@@ -44,7 +45,14 @@ public class AuthController {
             User user = userService.createUserByPhone(phoneNum);
             authResponse.setId(user.getId());
             authResponse.setName(user.getUserName());
+            authResponse.setPhoneNum(user.getPhoneNum());
+            authResponse.setPicUrl(user.getPicUrl());
         }
         return ApiResponse.ok(authResponse);
+    }
+
+    @PostMapping(value = "edit_base")
+    public ApiResponse updateUser(EditUserRequest request) {
+        return ApiResponse.ok(userService.updateUser(request));
     }
 }

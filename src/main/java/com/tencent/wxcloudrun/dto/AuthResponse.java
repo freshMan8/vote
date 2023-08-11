@@ -17,5 +17,9 @@ public class AuthResponse {
 
     private Long id;
 
+    private String phoneNum;
+
     private boolean success;
+
+    private String picUrl;
 }
