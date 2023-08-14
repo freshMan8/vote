@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
             user.setUpdatedBy("admin");
             user.setPicUrl("../../../images/tabbar/my_cur.png");
             userMapper.insertEntity(user);
-            dbUser = user;
+            dbUser = getUserByPhoneNum(phone);
         }
         return dbUser;
     }
