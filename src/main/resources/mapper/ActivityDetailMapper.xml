@@ -195,4 +195,11 @@
         order by order_num
     </select>
 
+    <select id="getAvaList" resultType="com.tencent.wxcloudrun.model.ActivityDetail">
+        SELECT a.*
+        FROM t_activity_detail a
+        join t_activity_header b on a.activity_id = b.id
+        where end_time <![CDATA[<]]> now()
+    </select>
+
 </mapper>

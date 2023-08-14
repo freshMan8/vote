@@ -23,6 +23,12 @@ public enum ErrorEnum {
     VOTE_ERROR_0006(CommonConstant.ErrorCode.DATA,"数据不存在或已被删除"),
 
     VOTE_ERROR_0007(CommonConstant.ErrorCode.DATA,"登录失败，请稍后再试"),
+
+    VOTE_ERROR_0008(CommonConstant.ErrorCode.DATA,"操作太过频繁，请稍后再试"),
+
+    VOTE_ERROR_0009(CommonConstant.ErrorCode.DATA,"今天该活动已超过投票次数，请明天再试"),
+
+    VOTE_ERROR_0010(CommonConstant.ErrorCode.DATA,"当前活动已结束"),
     ;
 
     @Getter

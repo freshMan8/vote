@@ -41,7 +41,7 @@ public interface ActivityDetailMapper {
      * @author lf
      * @date 2023/08/09
      **/
-    ActivityDetail load(int id);
+    ActivityDetail load(Long id);
 
     /**
      * 查询 分页查询
@@ -49,4 +49,13 @@ public interface ActivityDetailMapper {
      * @date 2023/08/09
      **/
     List<ActivityDetail> pageList(ActivityDetail activityDetail);
+
+    /**
+     * 获取未结束可以投票的明细
+     *
+     * @author 3832
+     * @date 2023/8/14 9:12
+     * @return 明细
+     **/
+    List<ActivityDetail> getAvaList();
 }
