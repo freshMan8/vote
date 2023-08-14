@@ -100,6 +100,14 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
         checkTodayVotes(request);
     }
 
+    @Override
+    public List<ActivityContextDetail> getContextList(ActivityDetailRequest request) {
+        ActivityContextDetail activityContextDetail = new ActivityContextDetail();
+        activityContextDetail.setActivityDetailId(request.getId());
+        List<ActivityContextDetail> list = activityContextDetailMapper.pageList(activityContextDetail);
+        return list;
+    }
+
     public void refreshPersonNum(ActivityDetail activityDetail,Integer num,Long userId) {
         RLock lock = null;
         try {

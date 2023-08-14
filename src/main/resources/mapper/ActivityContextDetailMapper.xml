@@ -117,6 +117,9 @@
         <if test="null != activityId and '' != activityId">
             and activity_id = #{activityId}
         </if>
+        <if test="null != activityDetailId and '' != activityDetailId">
+            and activity_detial_id = #{activityDetailId}
+        </if>
         <if test="null != context and '' != context">
             and context = #{context}
         </if>

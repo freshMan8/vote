@@ -42,4 +42,10 @@ public class ActivityController {
         activityHeaderService.vote(request);
         return ApiResponse.ok();
     }
+
+    @PostMapping(value = "/detail/context")
+    @OpenApi
+    public ApiResponse getContextById(@RequestBody ActivityDetailRequest request) {
+        return ApiResponse.ok(activityHeaderService.getContextList(request));
+    }
 }

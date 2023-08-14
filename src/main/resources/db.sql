@@ -101,5 +101,20 @@ CREATE TABLE `t_news_detail` (
                                  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='动态详情';
 
+CREATE TABLE `t_gift` (
+                          `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
+                          `activity_type` varchar(64) NOT NULL COMMENT '活动类型',
+                          `gift_name` varchar(64) NOT NULL COMMENT '礼物名称',
+                          `vote_num` int NOT NULL DEFAULT 1 COMMENT '投票数',
+                          `price` int NOT NULL DEFAULT 1 COMMENT '价值金额（分）',
+                          `pic_url` varchar(128) NOT NULL COMMENT '图片地址',
+                          `updated_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                          `updated_by` varchar(64) NOT NULL COMMENT '更新人',
+                          `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                          `create_by` varchar(64) NOT NULL COMMENT '创建人',
+                          PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='活动投票详情';
+
+
 
 

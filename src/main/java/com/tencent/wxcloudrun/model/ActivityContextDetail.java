@@ -24,6 +24,8 @@ public class ActivityContextDetail implements Serializable {
      */
     private Long activityId;
 
+    private Long activityDetailId;
+
     /**
      * 内容
      */
