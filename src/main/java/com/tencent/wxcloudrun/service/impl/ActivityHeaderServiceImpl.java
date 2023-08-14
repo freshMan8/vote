@@ -120,6 +120,7 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
             Integer integer = details.stream().map(ActivityDetail::getVoteNum).reduce(Integer::sum).orElse(0);
             ActivityHeader update = new ActivityHeader();
             update.setVoteNum(integer);
+            update.setParticipantNum((int)details.stream().map(ActivityDetail::getPhoneNum).distinct().count());
             update.setId(headerId);
             activityHeaderMapper.update(update);
         } finally {
