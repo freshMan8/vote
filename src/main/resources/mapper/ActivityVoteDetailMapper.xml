@@ -30,7 +30,7 @@
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.tencent.wxcloudrun.model.ActivityVoteDetail">
-        INSERT INTO activity_vote_detail
+        INSERT INTO t_activity_vote_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="null != activityDetailId and '' != activityDetailId">
                 activity_detail_id,
@@ -92,12 +92,12 @@
     </insert>
 
     <delete id="delete" >
-        DELETE FROM activity_vote_detail
+        DELETE FROM t_activity_vote_detail
         WHERE id = #{id}
     </delete>
 
     <update id="update" parameterType="com.tencent.wxcloudrun.model.ActivityVoteDetail">
-        UPDATE activity_vote_detail
+        UPDATE t_activity_vote_detail
         <set>
             <if test="null != activityDetailId and '' != activityDetailId">activity_detail_id = #{activityDetailId},</if>
             <if test="null != userId and '' != userId">user_id = #{userId},</if>
@@ -115,19 +115,35 @@
 
     <select id="load" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
-        FROM activity_vote_detail
+        FROM t_activity_vote_detail
         WHERE id = #{id}
     </select>
 
-    <select id="pageList" resultMap="BaseResultMap">
+    <select id="pageList" resultMap="BaseResultMap" parameterType="com.tencent.wxcloudrun.model.ActivityVoteDetail">
         SELECT <include refid="Base_Column_List" />
-        FROM activity_vote_detail
-        LIMIT #{offset}, #{pageSize}
+        FROM t_activity_vote_detail
+        where 1 = 1
+        <if test="null != activityDetailId and '' != activityDetailId">
+            and activity_detail_id = #{activityDetailId}
+        </if>
+        <if test="null != userId and '' != userId">
+            and user_id = #{userId}
+        </if>
+        <if test="null != voteNum and '' != voteNum">
+            and vote_num = #{voteNum}
+        </if>
+        <if test="null != giftType and '' != giftType">
+            and gift_type = #{giftType}
+        </if>
+        <if test="null != voteType and '' != voteType">
+            and vote_type = #{voteType}
+        </if>
     </select>
 
-    <select id="pageListCount" resultType="java.lang.Integer">
-        SELECT count(1)
-        FROM activity_vote_detail
+    <select id="getListByActiveId" resultType="com.tencent.wxcloudrun.model.ActivityVoteDetail">
+        SELECT a.*
+        FROM t_activity_vote_detail a
+        join t_activity_detail b on a.activity_detail_id = b.id
+        where b.activity_id = #{id}
     </select>
-
 </mapper>

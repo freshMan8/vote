@@ -48,13 +48,14 @@ public interface ActivityVoteDetailMapper {
      * @author lf
      * @date 2023/08/09
      **/
-    List<ActivityVoteDetail> pageList(int offset,int pagesize);
+    List<ActivityVoteDetail> pageList(ActivityVoteDetail param);
 
     /**
-     * 查询 分页查询 count
-     * @author lf
-     * @date 2023/08/09
+     * 根据活动ID查询投票详情
+     * @author 3832
+     * @date 2023/8/14 15:00
+     * @param id
+     * @return
      **/
-    int pageListCount(int offset,int pagesize);
-
+    List<ActivityVoteDetail> getListByActiveId(Long id);
 }

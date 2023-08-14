@@ -8,6 +8,7 @@ import com.tencent.wxcloudrun.contants.ErrorEnum;
 import com.tencent.wxcloudrun.dao.ActivityContextDetailMapper;
 import com.tencent.wxcloudrun.dao.ActivityDetailMapper;
 import com.tencent.wxcloudrun.dao.ActivityHeaderMapper;
+import com.tencent.wxcloudrun.dao.ActivityVoteDetailMapper;
 import com.tencent.wxcloudrun.dto.ActivityDetailRequest;
 import com.tencent.wxcloudrun.dto.ActivityDetailResponse;
 import com.tencent.wxcloudrun.dto.ActivityRequest;
@@ -17,7 +18,7 @@ import com.tencent.wxcloudrun.exception.VoteExceptionFactory;
 import com.tencent.wxcloudrun.model.ActivityContextDetail;
 import com.tencent.wxcloudrun.model.ActivityDetail;
 import com.tencent.wxcloudrun.model.ActivityHeader;
-import com.tencent.wxcloudrun.redis.RedisService;
+import com.tencent.wxcloudrun.model.ActivityVoteDetail;
 import com.tencent.wxcloudrun.redis.RedissonLockService;
 import com.tencent.wxcloudrun.service.ActivityHeaderService;
 import com.tencent.wxcloudrun.util.VoteContext;
@@ -56,6 +57,9 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
 
     @Resource(name = "refershExecutor")
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
+    @Autowired
+    private ActivityVoteDetailMapper voteDetailMapper;
 
     @Override
     public PageInfo<VoteResponse> getList(ActivityRequest request) {
@@ -96,6 +100,30 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
         checkTodayVotes(request);
     }
 
+    public void refreshPersonNum(ActivityDetail activityDetail,Integer num,Long userId) {
+        RLock lock = null;
+        try {
+            lock = RedissonLockService.getAndTryLock(RedissonLockService.getLockKey("refresh", activityDetail.getActivityId() + ""));
+            ActivityVoteDetail voteDetail = new ActivityVoteDetail();
+            voteDetail.setVoteNum(num);
+            voteDetail.setActivityDetailId(activityDetail.getId());
+            voteDetail.setGiftType(0);
+            voteDetail.setVoteType(1);
+            voteDetail.setUserId(userId);
+            voteDetail.setCreateBy("admin");
+            voteDetail.setUpdatedBy("admin");
+            voteDetailMapper.insert(voteDetail);
+
+            List<ActivityVoteDetail> list = voteDetailMapper.getListByActiveId(activityDetail.getActivityId());
+            ActivityHeader updateParam = new ActivityHeader();
+            updateParam.setId(activityDetail.getActivityId());
+            updateParam.setParticipantNum((int)list.stream().map(ActivityVoteDetail::getUserId).distinct().count());
+            activityHeaderMapper.update(updateParam);
+        } finally {
+            RedissonLockService.unlockDirectly(lock);
+        }
+    }
+
     public void refreshVistNum(Long headerId) {
         RLock lock = null;
         try {
@@ -130,6 +158,7 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
 
     private void checkTodayVotes(VoteRequest request) {
         String phoneNum = VoteContext.session().getPhoneNum();
+        Long userId = VoteContext.session().getId();
         String lockKey = RedissonLockService.getLockKey("today_check",phoneNum);
         RLock todayLock = null;
         RLock detailLock = null;
@@ -170,7 +199,10 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
             } else {
                 atomicLong.incrementAndGet();
             }
-            threadPoolTaskExecutor.submit(() -> refreshVoteNum(activityHeader.getId()));
+            threadPoolTaskExecutor.submit(() -> {
+                refreshVoteNum(activityHeader.getId());
+                refreshPersonNum(activityDetail,1,userId);
+            });
         } finally {
             RedissonLockService.unlockDirectly(todayLock);
             RedissonLockService.unlockDirectly(detailLock);
