@@ -34,6 +34,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -207,7 +208,7 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
             if (!atomicLong.isExists()) {
                 atomicLong.set(1L);
                 LocalTime midnight = LocalTime.MIDNIGHT;
-                LocalDate today = LocalDate.now();
+                LocalDate today = LocalDate.now(ZoneId.of("Asia/Shanghai"));
                 LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
                 LocalDateTime tomorrowMidnight = todayMidnight.plusDays(1);
                 long time = TimeUnit.NANOSECONDS.toSeconds(Duration.between(LocalDateTime.now(), tomorrowMidnight).toNanos());
