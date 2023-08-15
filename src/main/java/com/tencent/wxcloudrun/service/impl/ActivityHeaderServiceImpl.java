@@ -30,6 +30,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -202,7 +206,11 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
             activityDetailMapper.update(updateParam);
             if (!atomicLong.isExists()) {
                 atomicLong.set(1L);
-                long time = 86400 - (System.currentTimeMillis() + 8 * 3600) % 86400 ;
+                LocalTime midnight = LocalTime.MIDNIGHT;
+                LocalDate today = LocalDate.now();
+                LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
+                LocalDateTime tomorrowMidnight = todayMidnight.plusDays(1);
+                long time = TimeUnit.NANOSECONDS.toSeconds(Duration.between(LocalDateTime.now(), tomorrowMidnight).toNanos());
                 atomicLong.expire(time, TimeUnit.SECONDS);
             } else {
                 atomicLong.incrementAndGet();
