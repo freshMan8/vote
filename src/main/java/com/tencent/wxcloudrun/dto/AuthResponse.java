@@ -22,4 +22,6 @@ public class AuthResponse {
     private boolean success;
 
     private String picUrl;
+
+    private String userType;
 }

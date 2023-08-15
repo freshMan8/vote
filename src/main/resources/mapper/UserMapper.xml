@@ -11,13 +11,16 @@
             and account = #{account}
         </if>
         <if test="userName != null and userName != ''">
-            and user_name = #{userName}
+            and user_name like concat('%',#{userName},'%')
         </if>
         <if test="phoneNum != null and phoneNum != ''">
             and phone_num = #{phoneNum}
         </if>
         <if test="userType != null">
             and user_type = #{userType}
+        </if>
+        <if test="enable != null">
+            and enable = #{enable}
         </if>
     </select>
 
@@ -37,6 +40,9 @@
         </if>
         <if test="picUrl != null and picUrl != ''">
             pic_url = #{picUrl},
+        </if>
+        <if test="enable != null">
+            enable = #{enable},
         </if>
         updated_time = now(),
         updated_by= #{updatedBy}

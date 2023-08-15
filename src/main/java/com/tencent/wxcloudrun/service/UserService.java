@@ -1,6 +1,8 @@
 package com.tencent.wxcloudrun.service;
 
+import com.github.pagehelper.PageInfo;
 import com.tencent.wxcloudrun.dto.EditUserRequest;
+import com.tencent.wxcloudrun.dto.UserListRequest;
 import com.tencent.wxcloudrun.model.User;
 
 /**
@@ -16,4 +18,6 @@ public interface UserService {
     User createUserByPhone(String phone);
 
     Integer updateUser(EditUserRequest request);
+
+    PageInfo<User> getUserList(UserListRequest request);
 }

@@ -47,6 +47,9 @@ public class AuthController {
             authResponse.setName(user.getUserName());
             authResponse.setPhoneNum(user.getPhoneNum());
             authResponse.setPicUrl(user.getPicUrl());
+            if (user.getUserType() == -1) {
+                authResponse.setUserType("admin");
+            }
         }
         return ApiResponse.ok(authResponse);
     }

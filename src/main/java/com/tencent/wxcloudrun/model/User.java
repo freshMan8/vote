@@ -30,6 +30,8 @@ public class User {
 
     private String createBy;
 
+    private Integer enable;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updatedTime;
 

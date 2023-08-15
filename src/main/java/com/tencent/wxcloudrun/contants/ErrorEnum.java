@@ -29,6 +29,8 @@ public enum ErrorEnum {
     VOTE_ERROR_0009(CommonConstant.ErrorCode.DATA,"今天该活动已超过投票次数，请明天再试"),
 
     VOTE_ERROR_0010(CommonConstant.ErrorCode.DATA,"当前活动已结束"),
+
+    VOTE_ERROR_0011(CommonConstant.ErrorCode.ADMIN_ERROR,"当前用户非系统管理员"),
     ;
 
     @Getter

@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.config;
 
+import com.tencent.wxcloudrun.annotation.AdminCheck;
 import com.tencent.wxcloudrun.annotation.OpenApi;
 import com.tencent.wxcloudrun.contants.CommonConstant;
 import com.tencent.wxcloudrun.contants.ErrorEnum;
@@ -49,6 +50,11 @@ public class AuthInterceptor implements HandlerInterceptor {
         User user = userService.getUserByPhoneNum(phoneNum);
         if (user == null) {
             throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0003);
+        }
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        AdminCheck adminCheck = handlerMethod.getMethodAnnotation(AdminCheck.class);
+        if (adminCheck != null && user.getUserType() != -1) {
+            throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0011);
         }
         VoteContext.setSession(new AuthSession(user));
         return true;

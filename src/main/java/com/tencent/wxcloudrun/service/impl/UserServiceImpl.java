@@ -1,11 +1,16 @@
 package com.tencent.wxcloudrun.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.tencent.wxcloudrun.contants.CommonConstant;
 import com.tencent.wxcloudrun.contants.ErrorEnum;
 import com.tencent.wxcloudrun.dao.UserMapper;
 import com.tencent.wxcloudrun.dto.EditUserRequest;
+import com.tencent.wxcloudrun.dto.UserListRequest;
 import com.tencent.wxcloudrun.exception.VoteExceptionFactory;
 import com.tencent.wxcloudrun.model.AuthSession;
+import com.tencent.wxcloudrun.model.News;
 import com.tencent.wxcloudrun.model.User;
 import com.tencent.wxcloudrun.redis.RedisService;
 import com.tencent.wxcloudrun.redis.RedissonLockService;
@@ -79,5 +84,20 @@ public class UserServiceImpl implements UserService {
         String key = RedissonLockService.getLockKey(CommonConstant.USER_INFO,session.getPhoneNum());
         redisService.del(key);
         return result;
+    }
+
+    @Override
+    public PageInfo<User> getUserList(UserListRequest request) {
+        User user = new User();
+        user.setUserName(request.getSearch());
+        if ("status".equals(request.getSortType())) {
+            user.setEnable(1);
+        }
+        String sortStr = "create_time desc";
+        if ("newasc".equals(request.getSortVal())) {
+            sortStr = "create_time asc";
+        }
+        return PageHelper.startPage(1, 10000,sortStr)
+                .doSelectPageInfo(() -> userMapper.getEntity(user));
     }
 }
