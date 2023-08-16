@@ -14,6 +14,7 @@ import com.tencent.wxcloudrun.dto.ActivityDetailResponse;
 import com.tencent.wxcloudrun.dto.ActivityRequest;
 import com.tencent.wxcloudrun.dto.NewsRequest;
 import com.tencent.wxcloudrun.dto.NewsStatusRequest;
+import com.tencent.wxcloudrun.dto.UpdateActivityDetailRequest;
 import com.tencent.wxcloudrun.dto.VoteRequest;
 import com.tencent.wxcloudrun.dto.VoteResponse;
 import com.tencent.wxcloudrun.exception.VoteExceptionFactory;
@@ -30,6 +31,8 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.time.Duration;
@@ -39,7 +42,10 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * TO-DO
@@ -62,7 +68,7 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
     @Autowired
     private RedissonClient redissonClient;
 
-    @Resource(name = "refershExecutor")
+    @Resource(name = "refreshExecutor")
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     @Autowired
@@ -143,6 +149,87 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
         param.setId(request.getId());
         param.setUpdatedBy("admin");
         return activityHeaderMapper.update(param);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ActivityDetailResponse setDetailContent(ActivityDetailResponse response) {
+        List<ActivityDetail> details = response.getList();
+        if (!CollectionUtils.isEmpty(details)) {
+            for (ActivityDetail detail : details) {
+                ActivityDetailRequest req = new ActivityDetailRequest();
+                req.setId(detail.getId());
+                List<ActivityContextDetail> list = getContextList(req);
+                detail.setContent(list);
+            }
+        }
+        return response;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Integer updateActivityDetail(UpdateActivityDetailRequest request) {
+        Map<String,List<Object>> map = request.getForms().stream()
+                .collect(Collectors.toMap(UpdateActivityDetailRequest.FromsInfo::getMark,
+                        UpdateActivityDetailRequest.FromsInfo::getVal));
+        ActivityHeader activityHeader = new ActivityHeader();
+        activityHeader.setActivityType(request.getCateId());
+        activityHeader.setSort(request.getOrder());
+        activityHeader.setUpdatedBy("admin");
+        // activityHeader.setEnable(1);
+        activityHeader.setVoteThyme(request.getTheme());
+        activityHeader.setTitle(request.getTitle());
+        activityHeader.setId(request.getId());
+        activityHeader.setPicUrl(map.get("cover").get(0).toString());
+        activityHeader.setStartTime(request.getStart());
+        activityHeader.setEndTime(request.getEnd());
+        activityHeader.setVoteType(request.getType());
+        activityHeader.setVoteLimit(request.getMaxCnt());
+        if (request.getId() != null) {
+            activityHeader.setUpdatedBy("admin");
+            activityHeaderMapper.update(activityHeader);
+        } else {
+            activityHeader.setEnable(1);
+            activityHeader.setCreateBy("admin");
+            activityHeader.setUpdatedBy("admin");
+            activityHeaderMapper.insert(activityHeader);
+        }
+        // activityDetailMapper.delete(activityHeader.getId());
+        int order = 1;
+        ActivityDetail detailParam = new ActivityDetail();
+        detailParam.setActivityId(activityHeader.getId());
+        List<ActivityDetail> dbList = activityDetailMapper.pageList(detailParam);
+        List<Long> ids = dbList.stream().map(ActivityDetail::getId)
+                .collect(Collectors.toList());
+        for (ActivityDetail detail : request.getItem()) {
+            if (detail.getId() != null) {
+                activityContextDetailMapper.deleteByActivityDetailId(detail.getId());
+            }
+            detail.setUpdatedTime(null);
+            detail.setUpdatedBy("admin");
+            detail.setCreateBy("admin");
+            detail.setActivityId(activityHeader.getId());
+            detail.setOrderNum(order++);
+            if (detail.getId() != null) {
+                activityDetailMapper.update(detail);
+            } else {
+                activityDetailMapper.insert(detail);
+            }
+
+            List<ActivityContextDetail> list = detail.getContent();
+            if (!CollectionUtils.isEmpty(list)) {
+                int i = 0;
+                for (ActivityContextDetail activityContextDetail : list) {
+                    activityContextDetail.setActivityDetailId(detail.getId());
+                    activityContextDetail.setOrders(i++);
+                    activityContextDetail.setUpdatedBy("admin");
+                    activityContextDetail.setCreateBy("admin");
+                    activityContextDetail.setActivityId(0L);
+                    activityContextDetailMapper.insert(activityContextDetail);
+                }
+            }
+        }
+        return 1;
     }
 
     public void refreshPersonNum(ActivityDetail activityDetail,Integer num,Long userId) {

@@ -19,10 +19,10 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @date 2023/8/14 9:08
  */
 @Configuration
-public class CachePrepare {
+public class ExecutorDefine {
 
     @Bean
-    public ThreadPoolTaskExecutor refershExecutor() {
+    public ThreadPoolTaskExecutor refreshExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(20);
         executor.setKeepAliveSeconds(60);

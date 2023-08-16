@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 登录接口拦截
+ * 权限校验
  *
  * @author 3832
  * @date 2023/8/3 15:36

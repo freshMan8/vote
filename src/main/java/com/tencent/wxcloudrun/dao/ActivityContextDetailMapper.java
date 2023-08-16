@@ -50,4 +50,5 @@ public interface ActivityContextDetailMapper {
      **/
     List<ActivityContextDetail> pageList(ActivityContextDetail detail);
 
+    int deleteByActivityDetailId(Long id);
 }

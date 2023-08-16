@@ -56,31 +56,31 @@
             <if test="null != picUrl and '' != picUrl">
                 pic_url,
             </if>
-            <if test="null != sort and '' != sort">
+            <if test="null != sort ">
                 sort,
             </if>
-            <if test="null != sortTime and '' != sortTime">
+            <if test="null != sortTime ">
                 sort_time,
             </if>
-            <if test="null != participantNum and '' != participantNum">
+            <if test="null != participantNum ">
                 participant_num,
             </if>
-            <if test="null != voteNum and '' != voteNum">
+            <if test="null != voteNum ">
                 vote_num,
             </if>
-            <if test="null != visitNum and '' != visitNum">
+            <if test="null != visitNum ">
                 visit_num,
             </if>
             <if test="null != activityType and '' != activityType">
                 activity_type,
             </if>
-            <if test="null != voteThyme and '' != voteThyme">
+            <if test="null != voteThyme ">
                 vote_thyme,
             </if>
-            <if test="null != startTime and '' != startTime">
+            <if test="null != startTime ">
                 start_time,
             </if>
-            <if test="null != endTime and '' != endTime">
+            <if test="null != endTime ">
                 end_time,
             </if>
             <if test="null != voteType ">
@@ -89,13 +89,13 @@
             <if test="null != voteLimit">
                 vote_limit,
             </if>
-            <if test="null != updatedTime and '' != updatedTime">
+            <if test="null != updatedTime ">
                 updated_time,
             </if>
             <if test="null != updatedBy and '' != updatedBy">
                 updated_by,
             </if>
-            <if test="null != createTime and '' != createTime">
+            <if test="null != createTime ">
                 create_time,
             </if>
             <if test="null != createBy and '' != createBy">
@@ -109,31 +109,31 @@
             <if test="null != picUrl and '' != picUrl">
                 #{picUrl},
             </if>
-            <if test="null != sort and '' != sort">
+            <if test="null != sort ">
                 #{sort},
             </if>
-            <if test="null != sortTime and '' != sortTime">
+            <if test="null != sortTime ">
                 #{sortTime},
             </if>
-            <if test="null != participantNum and '' != participantNum">
+            <if test="null != participantNum ">
                 #{participantNum},
             </if>
-            <if test="null != voteNum and '' != voteNum">
+            <if test="null != voteNum ">
                 #{voteNum},
             </if>
-            <if test="null != visitNum and '' != visitNum">
+            <if test="null != visitNum ">
                 #{visitNum},
             </if>
-            <if test="null != activityType and '' != activityType">
+            <if test="null != activityType ">
                 #{activityType},
             </if>
-            <if test="null != voteThyme and '' != voteThyme">
+            <if test="null != voteThyme ">
                 #{voteThyme},
             </if>
-            <if test="null != startTime and '' != startTime">
+            <if test="null != startTime ">
                 #{startTime},
             </if>
-            <if test="null != endTime and '' != endTime">
+            <if test="null != endTime ">
                 #{endTime},
             </if>
             <if test="null != voteType ">
@@ -142,13 +142,13 @@
             <if test="null != voteLimit">
                 #{voteLimit},
             </if>
-            <if test="null != updatedTime and '' != updatedTime">
+            <if test="null != updatedTime ">
                 #{updatedTime},
             </if>
             <if test="null != updatedBy and '' != updatedBy">
                 #{updatedBy},
             </if>
-            <if test="null != createTime and '' != createTime">
+            <if test="null != createTime ">
                 #{createTime},
             </if>
             <if test="null != createBy and '' != createBy">
@@ -173,7 +173,7 @@
             <if test="null != voteNum ">vote_num = #{voteNum},</if>
             <if test="null != visitNum ">visit_num = #{visitNum},</if>
             <if test="null != activityType and '' != activityType">activity_type = #{activityType},</if>
-            <if test="null != voteThyme and '' != voteThyme">vote_thyme = #{voteThyme},</if>
+            <if test="null != voteThyme">vote_thyme = #{voteThyme},</if>
             <if test="null != enable ">enable = #{enable},</if>
             <if test="null != voteType ">
                 vote_type = #{voteType},
@@ -182,10 +182,10 @@
                 vote_limit = #{voteLimit},
             </if>
             <if test="null != startTime ">start_time = #{startTime},</if>
-            <if test="null != endTime and '' != endTime">end_time = #{endTime},</if>
-            <if test="null != updatedTime and '' != updatedTime">updated_time = #{updatedTime},</if>
+            <if test="null != endTime">end_time = #{endTime},</if>
+            <if test="null != updatedTime">updated_time = #{updatedTime},</if>
             <if test="null != updatedBy and '' != updatedBy">updated_by = #{updatedBy},</if>
-            <if test="null != createTime and '' != createTime">create_time = #{createTime},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
             <if test="null != createBy and '' != createBy">create_by = #{createBy}</if>
         </set>
         WHERE id = #{id}

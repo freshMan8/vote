@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.tencent.wxcloudrun.model.ActivityContextDetail" >
         <result column="id" property="id" />
         <result column="activity_id" property="activityId" />
+        <result column="activity_detial_id" property="activityDetailId" />
         <result column="context" property="context" />
         <result column="type" property="type" />
         <result column="orders" property="orders" />
@@ -18,6 +19,7 @@
     <sql id="Base_Column_List">
         id,
                 activity_id,
+activity_detial_id,
                 context,
                 `type`,
                 orders,
@@ -30,8 +32,11 @@
     <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.tencent.wxcloudrun.model.ActivityContextDetail">
         INSERT INTO t_activity_context_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="null != activityId and '' != activityId">
+            <if test="null != activityId ">
                 activity_id,
+            </if>
+            <if test="null != activityDetailId ">
+                activity_detial_id,
             </if>
             <if test="null != context and '' != context">
                 context,
@@ -39,16 +44,16 @@
             <if test="null != type and '' != type">
                 `type`,
             </if>
-            <if test="null != orders and '' != orders">
+            <if test="null != orders ">
                 orders,
             </if>
-            <if test="null != updatedTime and '' != updatedTime">
+            <if test="null != updatedTime">
                 updated_time,
             </if>
             <if test="null != updatedBy and '' != updatedBy">
                 updated_by,
             </if>
-            <if test="null != createTime and '' != createTime">
+            <if test="null != createTime ">
                 create_time,
             </if>
             <if test="null != createBy and '' != createBy">
@@ -56,8 +61,11 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="null != activityId and '' != activityId">
+            <if test="null != activityId ">
                 #{activityId},
+            </if>
+            <if test="null != activityDetailId ">
+                #{activityDetailId},
             </if>
             <if test="null != context and '' != context">
                 #{context},
@@ -65,16 +73,16 @@
             <if test="null != type and '' != type">
                 #{type},
             </if>
-            <if test="null != orders and '' != orders">
+            <if test="null != orders ">
                 #{orders},
             </if>
-            <if test="null != updatedTime and '' != updatedTime">
+            <if test="null != updatedTime ">
                 #{updatedTime},
             </if>
             <if test="null != updatedBy and '' != updatedBy">
                 #{updatedBy},
             </if>
-            <if test="null != createTime and '' != createTime">
+            <if test="null != createTime ">
                 #{createTime},
             </if>
             <if test="null != createBy and '' != createBy">
@@ -86,6 +94,11 @@
     <delete id="delete" >
         DELETE FROM t_activity_context_detail
         WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByActivityDetailId">
+        DELETE FROM t_activity_context_detail
+        WHERE activity_detial_id = #{id}
     </delete>
 
     <update id="update" parameterType="com.tencent.wxcloudrun.model.ActivityContextDetail">

@@ -5,6 +5,8 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 /**
  * @description 活动参与明细表
  * @author lf
@@ -91,4 +93,6 @@ public class ActivityDetail implements Serializable {
      * 创建人
      */
     private String createBy;
+
+    private List<ActivityContextDetail> content;
 }

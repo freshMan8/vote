@@ -6,6 +6,7 @@ import com.tencent.wxcloudrun.dto.ActivityDetailRequest;
 import com.tencent.wxcloudrun.dto.ApiResponse;
 import com.tencent.wxcloudrun.dto.NewsRequest;
 import com.tencent.wxcloudrun.dto.NewsStatusRequest;
+import com.tencent.wxcloudrun.dto.UpdateActivityDetailRequest;
 import com.tencent.wxcloudrun.dto.UpdateNewsRequest;
 import com.tencent.wxcloudrun.dto.UserListRequest;
 import com.tencent.wxcloudrun.model.User;
@@ -96,6 +97,12 @@ public class AdminController {
     @PostMapping(value = "/vote_detail_stat")
     @AdminCheck
     public ApiResponse getActivityDetail(@RequestBody ActivityDetailRequest request) {
-        return ApiResponse.ok(activityHeaderService.getDetailById(request));
+        return ApiResponse.ok(activityHeaderService.setDetailContent(activityHeaderService.getDetailById(request)));
+    }
+
+    @PostMapping(value = "/vote_edit")
+    @AdminCheck
+    public ApiResponse updateActivity(@RequestBody UpdateActivityDetailRequest request) {
+        return ApiResponse.ok(activityHeaderService.updateActivityDetail(request));
     }
 }
