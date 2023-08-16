@@ -20,4 +20,8 @@ public interface UserService {
     Integer updateUser(EditUserRequest request);
 
     PageInfo<User> getUserList(UserListRequest request);
+
+    Integer updateEntity(User user);
+
+    Integer deleteEntity(User user);
 }

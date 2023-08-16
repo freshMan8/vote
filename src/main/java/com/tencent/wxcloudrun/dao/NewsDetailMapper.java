@@ -27,7 +27,7 @@ public interface NewsDetailMapper {
      * @author lf
      * @date 2023/08/10
      **/
-    int delete(int id);
+    int delete(Long id);
 
     /**
      * 更新

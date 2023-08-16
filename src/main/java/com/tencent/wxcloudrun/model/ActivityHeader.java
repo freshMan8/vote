@@ -79,6 +79,8 @@ public class ActivityHeader implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
+    private Integer enable;
+
     /**
      * 更新时间
      */

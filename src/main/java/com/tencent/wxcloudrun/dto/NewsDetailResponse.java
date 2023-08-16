@@ -16,12 +16,20 @@ import java.util.List;
 @Data
 public class NewsDetailResponse {
 
+    private Long id;
+
     private String title;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date newsDate;
 
     private String newsCate;
+
+    private String context;
+
+    private Integer sort;
+
+    private String picUrl;
 
     private List<NewsDetail> content;
 }

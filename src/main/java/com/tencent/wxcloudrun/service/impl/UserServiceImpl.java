@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.tencent.wxcloudrun.contants.CommonConstant;
 import com.tencent.wxcloudrun.contants.ErrorEnum;
 import com.tencent.wxcloudrun.dao.UserMapper;
+import com.tencent.wxcloudrun.dto.ApiResponse;
 import com.tencent.wxcloudrun.dto.EditUserRequest;
 import com.tencent.wxcloudrun.dto.UserListRequest;
 import com.tencent.wxcloudrun.exception.VoteExceptionFactory;
@@ -100,4 +101,35 @@ public class UserServiceImpl implements UserService {
         return PageHelper.startPage(1, 10000,sortStr)
                 .doSelectPageInfo(() -> userMapper.getEntity(user));
     }
+
+    @Override
+    public Integer updateEntity(User user) {
+        User userParam = new User();
+        userParam.setId(user.getId());
+        List<User> userList = userMapper.getEntity(userParam);
+        if (!CollectionUtils.isEmpty(userList)) {
+            userMapper.updateEntity(user);
+            String key = RedissonLockService.getLockKey(CommonConstant.USER_INFO,userList.get(0).getPhoneNum());
+            redisService.del(key);
+        }
+        return 1;
+    }
+
+    @Override
+    public Integer deleteEntity(User user) {
+        if (user.getId() == null) {
+            throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0005);
+        }
+        User userParam = new User();
+        userParam.setId(user.getId());
+        List<User> userList = userMapper.getEntity(userParam);
+        if (!CollectionUtils.isEmpty(userList)) {
+            userMapper.deleteEntity(user);
+            String key = RedissonLockService.getLockKey(CommonConstant.USER_INFO,userList.get(0).getPhoneNum());
+            redisService.del(key);
+        }
+        return 1;
+    }
+
+
 }

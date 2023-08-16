@@ -46,6 +46,11 @@ public class NewsDetailServiceImpl implements NewsDetailService {
         response.setTitle(news.getTitle());
         response.setNewsCate("动态");
         response.setContent(newsDetails);
+        response.setSort(news.getSort());
+        response.setId(news.getId());
+        response.setPicUrl(news.getPicUrl());
+        response.setContext(news.getContext());
+
         return response;
     }
 }

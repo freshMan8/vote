@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.tencent.wxcloudrun.dto.ActivityDetailRequest;
 import com.tencent.wxcloudrun.dto.ActivityDetailResponse;
 import com.tencent.wxcloudrun.dto.ActivityRequest;
+import com.tencent.wxcloudrun.dto.NewsRequest;
 import com.tencent.wxcloudrun.dto.VoteRequest;
 import com.tencent.wxcloudrun.dto.VoteResponse;
 import com.tencent.wxcloudrun.model.ActivityContextDetail;
@@ -26,4 +27,6 @@ public interface ActivityHeaderService {
     void vote(VoteRequest request);
 
     List<ActivityContextDetail> getContextList(ActivityDetailRequest request);
+
+    PageInfo<VoteResponse> getAdminList(NewsRequest request);
 }

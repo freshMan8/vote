@@ -85,7 +85,7 @@
 
     <delete id="delete" >
         DELETE FROM t_news_detail
-        WHERE id = #{id}
+        WHERE news_id = #{id}
     </delete>
 
     <update id="update" parameterType="com.tencent.wxcloudrun.model.NewsDetail">

@@ -12,4 +12,8 @@ import lombok.Data;
 public class NewsRequest {
 
     private String search;
+
+    private String sortType;
+
+    private String sortVal;
 }

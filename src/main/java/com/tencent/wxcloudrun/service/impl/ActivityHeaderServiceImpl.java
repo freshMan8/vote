@@ -12,6 +12,7 @@ import com.tencent.wxcloudrun.dao.ActivityVoteDetailMapper;
 import com.tencent.wxcloudrun.dto.ActivityDetailRequest;
 import com.tencent.wxcloudrun.dto.ActivityDetailResponse;
 import com.tencent.wxcloudrun.dto.ActivityRequest;
+import com.tencent.wxcloudrun.dto.NewsRequest;
 import com.tencent.wxcloudrun.dto.VoteRequest;
 import com.tencent.wxcloudrun.dto.VoteResponse;
 import com.tencent.wxcloudrun.exception.VoteExceptionFactory;
@@ -70,7 +71,8 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
     public PageInfo<VoteResponse> getList(ActivityRequest request) {
         ActivityHeader param = new ActivityHeader();
         param.setActivityType(request.getSortVal());
-        PageInfo<ActivityHeader> pageInfo = PageHelper.startPage(1, 100,"create_time desc")
+        param.setEnable(1);
+        PageInfo<ActivityHeader> pageInfo = PageHelper.startPage(1, 1000,"sort asc")
                 .doSelectPageInfo(() -> activityHeaderMapper.pageList(param));
         PageInfo<VoteResponse> dtoPage = new PageInfo<>();
         BeanUtil.copyProperties(pageInfo,dtoPage);
@@ -111,6 +113,25 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
         activityContextDetail.setActivityDetailId(request.getId());
         List<ActivityContextDetail> list = activityContextDetailMapper.pageList(activityContextDetail);
         return list;
+    }
+
+    @Override
+    public PageInfo<VoteResponse> getAdminList(NewsRequest request) {
+        ActivityHeader param = new ActivityHeader();
+        param.setTitle(request.getSearch());
+        if ("status".equals(request.getSortType()) && "1".equals(request.getSortVal())) {
+            param.setEnable(1);
+        } else if ("status".equals(request.getSortType()) && "0".equals(request.getSortVal())) {
+            param.setEnable(0);
+        }
+        PageInfo<ActivityHeader> pageInfo = PageHelper.startPage(1, 1000,"sort asc")
+                .doSelectPageInfo(() -> activityHeaderMapper.pageList(param));
+        PageInfo<VoteResponse> dtoPage = new PageInfo<>();
+        BeanUtil.copyProperties(pageInfo,dtoPage);
+        List<VoteResponse> voteResponses = Lists.newArrayList();
+        pageInfo.getList().forEach(s -> voteResponses.add(new VoteResponse(s)));
+        dtoPage.setList(voteResponses);
+        return dtoPage;
     }
 
     public void refreshPersonNum(ActivityDetail activityDetail,Integer num,Long userId) {

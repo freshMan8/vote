@@ -13,6 +13,9 @@
         <if test="shortContext != null and shortContext != ''">
             and short_context like concat('%',#{shortContext},'%')
         </if>
+        <if test="enable != null">
+            and enable = #{enable}
+        </if>
     </select>
 
     <update id="updateEntity" parameterType="com.tencent.wxcloudrun.model.News">
@@ -35,7 +38,10 @@
         <if test="picUrl != null and picUrl != ''">
             pic_url = #{picUrl},
         </if>
-        updatedTime = now(),
+        <if test="enable != null">
+            enable = #{enable},
+        </if>
+        updated_time = now(),
         updated_by= #{updatedBy}
         where id = #{id}
     </update>
@@ -49,7 +55,7 @@
         limit 1
     </delete>
 
-    <insert id="insertEntity" parameterType="com.tencent.wxcloudrun.model.News">
+    <insert id="insertEntity" parameterType="com.tencent.wxcloudrun.model.News" useGeneratedKeys="true" keyProperty="id">
         insert into t_news(
             `title`,
             `short_context`,
@@ -63,7 +69,7 @@
             `create_by`
         ) values (
                   #{title},#{shortContext},#{context},#{picUrl},
-                  #{sort},#{sortTime},now(),{updatedBy},now(),#{createBy}
+                  #{sort},#{sortTime},now(),#{updatedBy},now(),#{createBy}
                 )
     </insert>
 

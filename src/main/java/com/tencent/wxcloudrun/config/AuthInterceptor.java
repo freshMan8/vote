@@ -51,6 +51,9 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (user == null) {
             throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0003);
         }
+        if (user.getEnable() != 1) {
+            throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0012);
+        }
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         AdminCheck adminCheck = handlerMethod.getMethodAnnotation(AdminCheck.class);
         if (adminCheck != null && user.getUserType() != -1) {

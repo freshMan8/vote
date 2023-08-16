@@ -53,6 +53,8 @@ public class News implements Serializable {
 
     private String type;
 
+    private Integer enable;
+
     /**
      * 更新时间
      */
