@@ -17,6 +17,8 @@
         <result column="start_time" property="startTime" />
         <result column="end_time" property="endTime" />
         <result column="enable" property="enable" />
+        <result column="vote_type" property="voteType" />
+        <result column="vote_limit" property="voteLimit" />
         <result column="updated_time" property="updatedTime" />
         <result column="updated_by" property="updatedBy" />
         <result column="create_time" property="createTime" />
@@ -37,6 +39,8 @@
                 start_time,
                 end_time,
                 enable,
+                vote_type,
+                vote_limit,
                 updated_time,
                 updated_by,
                 create_time,
@@ -78,6 +82,12 @@
             </if>
             <if test="null != endTime and '' != endTime">
                 end_time,
+            </if>
+            <if test="null != voteType ">
+                vote_type,
+            </if>
+            <if test="null != voteLimit">
+                vote_limit,
             </if>
             <if test="null != updatedTime and '' != updatedTime">
                 updated_time,
@@ -126,6 +136,12 @@
             <if test="null != endTime and '' != endTime">
                 #{endTime},
             </if>
+            <if test="null != voteType ">
+                #{voteType},
+            </if>
+            <if test="null != voteLimit">
+                #{voteLimit},
+            </if>
             <if test="null != updatedTime and '' != updatedTime">
                 #{updatedTime},
             </if>
@@ -151,14 +167,21 @@
         <set>
             <if test="null != title and '' != title">title = #{title},</if>
             <if test="null != picUrl and '' != picUrl">pic_url = #{picUrl},</if>
-            <if test="null != sort and '' != sort">sort = #{sort},</if>
-            <if test="null != sortTime and '' != sortTime">sort_time = #{sortTime},</if>
-            <if test="null != participantNum and '' != participantNum">participant_num = #{participantNum},</if>
-            <if test="null != voteNum and '' != voteNum">vote_num = #{voteNum},</if>
-            <if test="null != visitNum and '' != visitNum">visit_num = #{visitNum},</if>
+            <if test="null != sort ">sort = #{sort},</if>
+            <if test="null != sortTime ">sort_time = #{sortTime},</if>
+            <if test="null != participantNum ">participant_num = #{participantNum},</if>
+            <if test="null != voteNum ">vote_num = #{voteNum},</if>
+            <if test="null != visitNum ">visit_num = #{visitNum},</if>
             <if test="null != activityType and '' != activityType">activity_type = #{activityType},</if>
             <if test="null != voteThyme and '' != voteThyme">vote_thyme = #{voteThyme},</if>
-            <if test="null != startTime and '' != startTime">start_time = #{startTime},</if>
+            <if test="null != enable ">enable = #{enable},</if>
+            <if test="null != voteType ">
+                vote_type = #{voteType},
+            </if>
+            <if test="null != voteLimit">
+                vote_limit = #{voteLimit},
+            </if>
+            <if test="null != startTime ">start_time = #{startTime},</if>
             <if test="null != endTime and '' != endTime">end_time = #{endTime},</if>
             <if test="null != updatedTime and '' != updatedTime">updated_time = #{updatedTime},</if>
             <if test="null != updatedBy and '' != updatedBy">updated_by = #{updatedBy},</if>
@@ -227,6 +250,12 @@
         </if>
         <if test="enable != null ">
             and enable = #{enable}
+        </if>
+        <if test="voteType != null ">
+            and vote_type = #{voteType}
+        </if>
+        <if test="voteLimit != null ">
+            and vote_limit = #{voteLimit}
         </if>
     </select>
 </mapper>

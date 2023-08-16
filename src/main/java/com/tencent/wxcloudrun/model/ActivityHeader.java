@@ -81,6 +81,10 @@ public class ActivityHeader implements Serializable {
 
     private Integer enable;
 
+    private Integer voteType;
+
+    private Integer voteLimit;
+
     /**
      * 更新时间
      */

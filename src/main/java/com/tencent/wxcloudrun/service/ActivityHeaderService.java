@@ -5,6 +5,7 @@ import com.tencent.wxcloudrun.dto.ActivityDetailRequest;
 import com.tencent.wxcloudrun.dto.ActivityDetailResponse;
 import com.tencent.wxcloudrun.dto.ActivityRequest;
 import com.tencent.wxcloudrun.dto.NewsRequest;
+import com.tencent.wxcloudrun.dto.NewsStatusRequest;
 import com.tencent.wxcloudrun.dto.VoteRequest;
 import com.tencent.wxcloudrun.dto.VoteResponse;
 import com.tencent.wxcloudrun.model.ActivityContextDetail;
@@ -29,4 +30,6 @@ public interface ActivityHeaderService {
     List<ActivityContextDetail> getContextList(ActivityDetailRequest request);
 
     PageInfo<VoteResponse> getAdminList(NewsRequest request);
+
+    Integer updateStatus(NewsStatusRequest request);
 }

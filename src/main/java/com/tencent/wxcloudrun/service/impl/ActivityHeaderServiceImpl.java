@@ -13,6 +13,7 @@ import com.tencent.wxcloudrun.dto.ActivityDetailRequest;
 import com.tencent.wxcloudrun.dto.ActivityDetailResponse;
 import com.tencent.wxcloudrun.dto.ActivityRequest;
 import com.tencent.wxcloudrun.dto.NewsRequest;
+import com.tencent.wxcloudrun.dto.NewsStatusRequest;
 import com.tencent.wxcloudrun.dto.VoteRequest;
 import com.tencent.wxcloudrun.dto.VoteResponse;
 import com.tencent.wxcloudrun.exception.VoteExceptionFactory;
@@ -134,6 +135,16 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
         return dtoPage;
     }
 
+    @Override
+    public Integer updateStatus(NewsStatusRequest request) {
+        ActivityHeader param = new ActivityHeader();
+        param.setEnable(request.getStatus());
+        param.setSort(request.getSort());
+        param.setId(request.getId());
+        param.setUpdatedBy("admin");
+        return activityHeaderMapper.update(param);
+    }
+
     public void refreshPersonNum(ActivityDetail activityDetail,Integer num,Long userId) {
         RLock lock = null;
         try {
@@ -201,11 +212,6 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
             if (todayLock == null) {
                 throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0008);
             }
-            String textKey = RedissonLockService.getLockKey("today",request.getVoteId() + "",phoneNum);
-            RAtomicLong atomicLong = redissonClient.getAtomicLong(textKey);
-            if (atomicLong.isExists() && atomicLong.get() >= 3) {
-                throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0009);
-            }
             String voteLock = RedissonLockService.getLockKey("vote",request.getId() + "");
             detailLock = RedissonLockService.getAndTryLock(voteLock);
             if (detailLock == null) {
@@ -222,18 +228,25 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
             if (activityHeader.getEndTime().before(new Date())) {
                 throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0010);
             }
+            String textKey = RedissonLockService.getLockKey("today",request.getVoteId() + "",phoneNum);
+            RAtomicLong atomicLong = redissonClient.getAtomicLong(textKey);
+            if (atomicLong.isExists() && atomicLong.get() >= activityHeader.getVoteLimit()) {
+                throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0009);
+            }
             ActivityDetail updateParam = new ActivityDetail();
             updateParam.setId(activityDetail.getId());
             updateParam.setVoteNum(activityDetail.getVoteNum() + 1);
             activityDetailMapper.update(updateParam);
             if (!atomicLong.isExists()) {
                 atomicLong.set(1L);
-                LocalTime midnight = LocalTime.MIDNIGHT;
-                LocalDate today = LocalDate.now(ZoneId.of("Asia/Shanghai"));
-                LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
-                LocalDateTime tomorrowMidnight = todayMidnight.plusDays(1);
-                long time = TimeUnit.NANOSECONDS.toSeconds(Duration.between(LocalDateTime.now(), tomorrowMidnight).toNanos());
-                atomicLong.expire(time, TimeUnit.SECONDS);
+                if (activityHeader.getVoteType() == 1) {
+                    LocalTime midnight = LocalTime.MIDNIGHT;
+                    LocalDate today = LocalDate.now(ZoneId.of("Asia/Shanghai"));
+                    LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
+                    LocalDateTime tomorrowMidnight = todayMidnight.plusDays(1);
+                    long time = TimeUnit.NANOSECONDS.toSeconds(Duration.between(LocalDateTime.now(), tomorrowMidnight).toNanos());
+                    atomicLong.expire(time, TimeUnit.SECONDS);
+                }
             } else {
                 atomicLong.incrementAndGet();
             }

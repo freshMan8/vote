@@ -2,6 +2,7 @@ package com.tencent.wxcloudrun.controller;
 
 import com.tencent.wxcloudrun.annotation.AdminCheck;
 import com.tencent.wxcloudrun.annotation.OpenApi;
+import com.tencent.wxcloudrun.dto.ActivityDetailRequest;
 import com.tencent.wxcloudrun.dto.ApiResponse;
 import com.tencent.wxcloudrun.dto.NewsRequest;
 import com.tencent.wxcloudrun.dto.NewsStatusRequest;
@@ -84,5 +85,17 @@ public class AdminController {
     @AdminCheck
     public ApiResponse getActivityList(@RequestBody NewsRequest request) {
         return ApiResponse.ok(activityHeaderService.getAdminList(request));
+    }
+
+    @PostMapping(value = "vote_status")
+    @AdminCheck
+    public ApiResponse updateActivityStatus(@RequestBody NewsStatusRequest request) {
+        return ApiResponse.ok(activityHeaderService.updateStatus(request));
+    }
+
+    @PostMapping(value = "/vote_detail_stat")
+    @AdminCheck
+    public ApiResponse getActivityDetail(@RequestBody ActivityDetailRequest request) {
+        return ApiResponse.ok(activityHeaderService.getDetailById(request));
     }
 }
