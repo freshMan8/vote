@@ -12,6 +12,7 @@ import com.tencent.wxcloudrun.dao.ActivityVoteDetailMapper;
 import com.tencent.wxcloudrun.dto.ActivityDetailRequest;
 import com.tencent.wxcloudrun.dto.ActivityDetailResponse;
 import com.tencent.wxcloudrun.dto.ActivityRequest;
+import com.tencent.wxcloudrun.dto.JoinActivityRequest;
 import com.tencent.wxcloudrun.dto.NewsRequest;
 import com.tencent.wxcloudrun.dto.NewsStatusRequest;
 import com.tencent.wxcloudrun.dto.UpdateActivityDetailRequest;
@@ -84,7 +85,11 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
         PageInfo<VoteResponse> dtoPage = new PageInfo<>();
         BeanUtil.copyProperties(pageInfo,dtoPage);
         List<VoteResponse> voteResponses = Lists.newArrayList();
-        pageInfo.getList().forEach(s -> voteResponses.add(new VoteResponse(s)));
+        pageInfo.getList().forEach(s -> {
+            VoteResponse response = new VoteResponse(s);
+            response.setParticipantNum(activityDetailMapper.getNumByActiveId(s.getId()));
+            voteResponses.add(response);
+        });
         dtoPage.setList(voteResponses);
         return dtoPage;
     }
@@ -198,9 +203,14 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
         int order = 1;
         ActivityDetail detailParam = new ActivityDetail();
         detailParam.setActivityId(activityHeader.getId());
-        List<ActivityDetail> dbList = activityDetailMapper.pageList(detailParam);
-        List<Long> ids = dbList.stream().map(ActivityDetail::getId)
-                .collect(Collectors.toList());
+        List<Long> dbList = activityDetailMapper.pageList(detailParam)
+                .stream().map(ActivityDetail::getId).collect(Collectors.toList());
+        List<Long> reqIds = request.getItem().stream().map(ActivityDetail::getId).collect(Collectors.toList());
+        List<Long> ids = dbList.stream().filter(s ->
+                !reqIds.contains(s)).collect(Collectors.toList());
+        for (Long id : ids) {
+            activityDetailMapper.deleteById(id);
+        }
         for (ActivityDetail detail : request.getItem()) {
             if (detail.getId() != null) {
                 activityContextDetailMapper.deleteByActivityDetailId(detail.getId());
@@ -210,9 +220,10 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
             detail.setCreateBy("admin");
             detail.setActivityId(activityHeader.getId());
             detail.setOrderNum(order++);
-            if (detail.getId() != null) {
+            if (detail.getId() != null && dbList.contains(detail.getId())) {
                 activityDetailMapper.update(detail);
             } else {
+                detail.setId(null);
                 activityDetailMapper.insert(detail);
             }
 
@@ -230,6 +241,42 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
             }
         }
         return 1;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void joinActivity(JoinActivityRequest request) {
+        RLock lock = null;
+        try {
+            String lockKey = RedissonLockService.getLockKey("joinActivity",request.getActivityId() + "");
+            lock = RedissonLockService.getAndTryLock(lockKey);
+            ActivityDetail paramDetail = new ActivityDetail();
+            paramDetail.setActivityId(request.getActivityId());
+            paramDetail.setUserId(VoteContext.session().getId());
+            if (activityDetailMapper.pageList(paramDetail).size() > 0) {
+                throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0013);
+            }
+            ActivityDetail detail = new ActivityDetail();
+            BeanUtil.copyProperties(request,detail);
+            int num = activityDetailMapper.getMaxNumByActiveId(request.getActivityId());
+            detail.setOrderNum(num + 1);
+            detail.setUserId(VoteContext.session().getId());
+            detail.setUpdatedBy("admin");
+            detail.setCreateBy("admin");
+            detail.setId(null);
+            activityDetailMapper.insert(detail);
+            int i = 0;
+            for (ActivityContextDetail form : request.getForms()) {
+                form.setActivityId(0L);
+                form.setActivityDetailId(detail.getId());
+                form.setOrders(++i);
+                form.setUpdatedBy("admin");
+                form.setCreateBy("admin");
+                activityContextDetailMapper.insert(form);
+            }
+        } finally {
+            RedissonLockService.unlock(lock);
+        }
     }
 
     public void refreshPersonNum(ActivityDetail activityDetail,Integer num,Long userId) {

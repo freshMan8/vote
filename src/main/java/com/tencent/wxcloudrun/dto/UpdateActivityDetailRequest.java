@@ -40,7 +40,7 @@ public class UpdateActivityDetailRequest {
 
     private List<FromsInfo> forms = Lists.newArrayList();
 
-    private List<ActivityDetail> item;
+    private List<ActivityDetail> item = Lists.newArrayList();
 
     @Data
     public static class FromsInfo {

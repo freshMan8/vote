@@ -136,6 +136,11 @@
         WHERE activity_id = #{id}
     </delete>
 
+    <delete id="deleteById">
+        DELETE FROM t_activity_detail
+        WHERE id = #{id}
+    </delete>
+
     <update id="update" parameterType="com.tencent.wxcloudrun.model.ActivityDetail">
         UPDATE t_activity_detail
         <set>
@@ -202,4 +207,13 @@
         where end_time <![CDATA[<]]> now()
     </select>
 
+    <select id="getNumByActiveId" resultType="java.lang.Integer">
+        select count(*) from t_activity_detail
+        where activity_id = #{id}
+    </select>
+
+    <select id="getMaxNumByActiveId" resultType="java.lang.Integer">
+        select max(order_num) from t_activity_detail
+        where activity_id = #{id}
+    </select>
 </mapper>

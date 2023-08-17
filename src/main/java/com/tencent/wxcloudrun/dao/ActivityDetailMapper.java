@@ -29,6 +29,8 @@ public interface ActivityDetailMapper {
      **/
     int delete(Long id);
 
+    int deleteById(Long id);
+
     /**
      * 更新
      * @author lf
@@ -58,4 +60,8 @@ public interface ActivityDetailMapper {
      * @return 明细
      **/
     List<ActivityDetail> getAvaList();
+
+    Integer getNumByActiveId(Long id);
+
+    Integer getMaxNumByActiveId(Long id);
 }

@@ -4,6 +4,7 @@ import com.tencent.wxcloudrun.annotation.OpenApi;
 import com.tencent.wxcloudrun.dto.ActivityDetailRequest;
 import com.tencent.wxcloudrun.dto.ActivityRequest;
 import com.tencent.wxcloudrun.dto.ApiResponse;
+import com.tencent.wxcloudrun.dto.JoinActivityRequest;
 import com.tencent.wxcloudrun.dto.VoteRequest;
 import com.tencent.wxcloudrun.service.ActivityHeaderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +48,11 @@ public class ActivityController {
     @OpenApi
     public ApiResponse getContextById(@RequestBody ActivityDetailRequest request) {
         return ApiResponse.ok(activityHeaderService.getContextList(request));
+    }
+
+    @PostMapping(value = "/join")
+    public ApiResponse join(@RequestBody JoinActivityRequest request) {
+        activityHeaderService.joinActivity(request);
+        return ApiResponse.ok();
     }
 }

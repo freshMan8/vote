@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.tencent.wxcloudrun.dto.ActivityDetailRequest;
 import com.tencent.wxcloudrun.dto.ActivityDetailResponse;
 import com.tencent.wxcloudrun.dto.ActivityRequest;
+import com.tencent.wxcloudrun.dto.JoinActivityRequest;
 import com.tencent.wxcloudrun.dto.NewsRequest;
 import com.tencent.wxcloudrun.dto.NewsStatusRequest;
 import com.tencent.wxcloudrun.dto.UpdateActivityDetailRequest;
@@ -37,4 +38,6 @@ public interface ActivityHeaderService {
     ActivityDetailResponse setDetailContent(ActivityDetailResponse response);
 
     Integer updateActivityDetail(UpdateActivityDetailRequest request);
+
+    void joinActivity(JoinActivityRequest request);
 }
