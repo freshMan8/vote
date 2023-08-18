@@ -35,6 +35,8 @@ public enum ErrorEnum {
     VOTE_ERROR_0012(CommonConstant.ErrorCode.ADMIN_ERROR,"当前用户已被禁用"),
 
     VOTE_ERROR_0013(CommonConstant.ErrorCode.ADMIN_ERROR,"当前用户已参与本场赛事"),
+
+    VOTE_ERROR_0014(CommonConstant.ErrorCode.ADMIN_ERROR,"当前用户未参与本场赛事"),
     ;
 
     @Getter

@@ -1,10 +1,12 @@
 package com.tencent.wxcloudrun.controller;
 
+import com.tencent.wxcloudrun.annotation.AdminCheck;
 import com.tencent.wxcloudrun.annotation.OpenApi;
 import com.tencent.wxcloudrun.dto.ApiResponse;
 import com.tencent.wxcloudrun.dto.AuthResponse;
 import com.tencent.wxcloudrun.dto.EditUserRequest;
 import com.tencent.wxcloudrun.dto.LoginRequest;
+import com.tencent.wxcloudrun.dto.UpdateTypeRequest;
 import com.tencent.wxcloudrun.model.User;
 import com.tencent.wxcloudrun.service.UserService;
 import com.tencent.wxcloudrun.util.TokenUtil;
@@ -57,5 +59,11 @@ public class AuthController {
     @PostMapping(value = "edit_base")
     public ApiResponse updateUser(@RequestBody EditUserRequest request) {
         return ApiResponse.ok(userService.updateUser(request));
+    }
+
+    @AdminCheck
+    @PostMapping(value = "/edit_type")
+    public ApiResponse updateType(@RequestBody UpdateTypeRequest request) {
+        return ApiResponse.ok(userService.updateUserType(request));
     }
 }

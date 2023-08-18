@@ -101,6 +101,11 @@ activity_detial_id,
         WHERE activity_detial_id = #{id}
     </delete>
 
+    <delete id="deleteByActivityId">
+        DELETE FROM t_activity_context_detail
+        WHERE activity_id = #{id}
+    </delete>
+
     <update id="update" parameterType="com.tencent.wxcloudrun.model.ActivityContextDetail">
         UPDATE t_activity_context_detail
         <set>

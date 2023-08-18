@@ -15,6 +15,8 @@
         <result column="pic_url" property="picUrl" />
         <result column="order_num" property="orderNum" />
         <result column="vote_num" property="voteNum" />
+        <result column="status" property="status" />
+        <result column="reject_reason" property="rejectReason" />
         <result column="updated_time" property="updatedTime" />
         <result column="updated_by" property="updatedBy" />
         <result column="create_time" property="createTime" />
@@ -33,6 +35,8 @@
                 pic_url,
                 order_num,
                 vote_num,
+                status,
+                reject_reason,
                 updated_time,
                 updated_by,
                 create_time,
@@ -71,6 +75,12 @@
             </if>
             <if test="null != voteNum ">
                 vote_num,
+            </if>
+            <if test="null != status ">
+                status,
+            </if>
+            <if test="null != rejectReason and rejectReason != '' ">
+                reject_reason,
             </if>
             <if test="null != updatedTime">
                 updated_time,
@@ -116,6 +126,12 @@
             <if test="null != voteNum ">
                 #{voteNum},
             </if>
+            <if test="null != status ">
+                #{status},
+            </if>
+            <if test="null != rejectReason and rejectReason != '' ">
+                #{rejectReason},
+            </if>
             <if test="null != updatedTime">
                 #{updatedTime},
             </if>
@@ -154,6 +170,12 @@
             <if test="null != picUrl and '' != picUrl">pic_url = #{picUrl},</if>
             <if test="null != orderNum ">order_num = #{orderNum},</if>
             <if test="null != voteNum ">vote_num = #{voteNum},</if>
+            <if test="null != status ">
+                status = #{status},
+            </if>
+            <if test="null != rejectReason and rejectReason != '' ">
+                reject_reason = {rejectReason},
+            </if>
             <if test="null != updatedTime ">updated_time = #{updatedTime},</if>
             <if test="null != updatedBy and '' != updatedBy">updated_by = #{updatedBy},</if>
             <if test="null != createTime ">create_time = #{createTime},</if>
@@ -173,6 +195,9 @@
         SELECT <include refid="Base_Column_List" />
         FROM t_activity_detail
         where 1 = 1
+        <if test="id != null">
+            and id = #{id}
+        </if>
         <if test="null != activityId and '' != activityId">
             and activity_id = #{activityId}
         </if>
@@ -197,6 +222,12 @@
         <if test="null != voteNum and '' != voteNum">
             and vote_num = #{voteNum}
         </if>
+        <if test="null != status ">
+            and status = #{status}
+        </if>
+        <if test="null != rejectReason and rejectReason != '' ">
+            and reject_reason = {rejectReason}
+        </if>
         order by order_num
     </select>
 
@@ -214,6 +245,11 @@
 
     <select id="getMaxNumByActiveId" resultType="java.lang.Integer">
         select max(order_num) from t_activity_detail
+        where activity_id = #{id}
+    </select>
+
+    <select id="getNumCheckByActiveId" resultType="java.lang.String">
+        select concat(sum(case when status = 0 then 1 else 0 end),' / ',count(*)) from t_activity_detail
         where activity_id = #{id}
     </select>
 </mapper>

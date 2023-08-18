@@ -8,6 +8,7 @@ import com.tencent.wxcloudrun.contants.ErrorEnum;
 import com.tencent.wxcloudrun.dao.UserMapper;
 import com.tencent.wxcloudrun.dto.ApiResponse;
 import com.tencent.wxcloudrun.dto.EditUserRequest;
+import com.tencent.wxcloudrun.dto.UpdateTypeRequest;
 import com.tencent.wxcloudrun.dto.UserListRequest;
 import com.tencent.wxcloudrun.exception.VoteExceptionFactory;
 import com.tencent.wxcloudrun.model.AuthSession;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -98,8 +100,9 @@ public class UserServiceImpl implements UserService {
         if ("newasc".equals(request.getSortVal())) {
             sortStr = "create_time asc";
         }
+        List<Integer> typs = Arrays.asList(1,-1);
         return PageHelper.startPage(1, 10000,sortStr)
-                .doSelectPageInfo(() -> userMapper.getEntity(user));
+                .doSelectPageInfo(() -> userMapper.getEntityType(user,typs));
     }
 
     @Override
@@ -129,6 +132,15 @@ public class UserServiceImpl implements UserService {
             redisService.del(key);
         }
         return 1;
+    }
+
+    @Override
+    public Integer updateUserType(UpdateTypeRequest request) {
+        User userParam = new User();
+        userParam.setId(request.getId());
+        userParam.setUserType(request.getType());
+        userParam.setUpdatedBy("admin");
+        return userMapper.updateEntity(userParam);
     }
 
 

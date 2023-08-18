@@ -1,6 +1,8 @@
 package com.tencent.wxcloudrun.service;
 
 import com.github.pagehelper.PageInfo;
+import com.tencent.wxcloudrun.dto.ActivityDetailCheckRequest;
+import com.tencent.wxcloudrun.dto.ActivityDetailInfoResponse;
 import com.tencent.wxcloudrun.dto.ActivityDetailRequest;
 import com.tencent.wxcloudrun.dto.ActivityDetailResponse;
 import com.tencent.wxcloudrun.dto.ActivityRequest;
@@ -40,4 +42,10 @@ public interface ActivityHeaderService {
     Integer updateActivityDetail(UpdateActivityDetailRequest request);
 
     void joinActivity(JoinActivityRequest request);
+
+    ActivityDetailInfoResponse getActiveDetail(ActivityDetailRequest request);
+
+    void editActivity(JoinActivityRequest request);
+
+    Integer checkDetail(ActivityDetailCheckRequest request);
 }

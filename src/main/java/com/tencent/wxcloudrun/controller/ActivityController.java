@@ -55,4 +55,15 @@ public class ActivityController {
         activityHeaderService.joinActivity(request);
         return ApiResponse.ok();
     }
+
+    @PostMapping(value = "/vote_detail")
+    public ApiResponse getActiveDetail(@RequestBody ActivityDetailRequest request) {
+        return ApiResponse.ok(activityHeaderService.getActiveDetail(request));
+    }
+
+    @PostMapping(value = "/vote_detail_edit")
+    public ApiResponse editActiveDetail(@RequestBody JoinActivityRequest request) {
+        activityHeaderService.editActivity(request);
+        return ApiResponse.ok();
+    }
 }

@@ -29,6 +29,8 @@ public interface ActivityContextDetailMapper {
      **/
     int delete(int id);
 
+    int deleteByActivityId(Long id);
+
     /**
      * 更新
      * @author lf

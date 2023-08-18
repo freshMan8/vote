@@ -11,6 +11,7 @@ import com.tencent.wxcloudrun.service.UserService;
 import com.tencent.wxcloudrun.util.TokenUtil;
 import com.tencent.wxcloudrun.util.VoteContext;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -34,18 +35,18 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        String token = request.getHeader(CommonConstant.TOKEN);
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             //获取方法权限注解
             OpenApi openApi = handlerMethod.getMethodAnnotation(OpenApi.class);
             //判断是否是开放接口
-            if (openApi != null) {
+            if (openApi != null && StringUtils.isEmpty(token)) {
                 return true;
             }
         } else {
             return true;
         }
-        String token = request.getHeader(CommonConstant.TOKEN);
         String phoneNum = TokenUtil.INSTANCE.getPhoneNumByAuthToken(token);
         User user = userService.getUserByPhoneNum(phoneNum);
         if (user == null) {

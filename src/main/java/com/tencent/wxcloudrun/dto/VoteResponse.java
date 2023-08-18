@@ -21,6 +21,8 @@ public class VoteResponse extends ActivityHeader {
 
     private String cateName;
 
+    private String checkNum;
+
     public VoteResponse(ActivityHeader header) {
         BeanUtil.copyProperties(header,this);
         this.setStatusDesc(new Date().after(header.getEndTime()) ? "已截止" : "进行中");

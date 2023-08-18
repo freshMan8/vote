@@ -19,4 +19,6 @@ public class ActivityDetailResponse extends ActivityHeader {
     private List<ActivityDetail> list;
 
     private List<ActivityContextDetail> contextDetails;
+
+    private Integer currentUserJoined;
 }

@@ -1,6 +1,7 @@
 package com.tencent.wxcloudrun.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
@@ -9,6 +10,8 @@ import com.tencent.wxcloudrun.dao.ActivityContextDetailMapper;
 import com.tencent.wxcloudrun.dao.ActivityDetailMapper;
 import com.tencent.wxcloudrun.dao.ActivityHeaderMapper;
 import com.tencent.wxcloudrun.dao.ActivityVoteDetailMapper;
+import com.tencent.wxcloudrun.dto.ActivityDetailCheckRequest;
+import com.tencent.wxcloudrun.dto.ActivityDetailInfoResponse;
 import com.tencent.wxcloudrun.dto.ActivityDetailRequest;
 import com.tencent.wxcloudrun.dto.ActivityDetailResponse;
 import com.tencent.wxcloudrun.dto.ActivityRequest;
@@ -23,6 +26,7 @@ import com.tencent.wxcloudrun.model.ActivityContextDetail;
 import com.tencent.wxcloudrun.model.ActivityDetail;
 import com.tencent.wxcloudrun.model.ActivityHeader;
 import com.tencent.wxcloudrun.model.ActivityVoteDetail;
+import com.tencent.wxcloudrun.model.AuthSession;
 import com.tencent.wxcloudrun.redis.RedissonLockService;
 import com.tencent.wxcloudrun.service.ActivityHeaderService;
 import com.tencent.wxcloudrun.util.VoteContext;
@@ -104,6 +108,9 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
         BeanUtil.copyProperties(header,response);
         ActivityDetail param = new ActivityDetail();
         param.setActivityId(header.getId());
+        if (request.getStatus() == null) {
+            param.setStatus(1);
+        }
         List<ActivityDetail> list = activityDetailMapper.pageList(param);
         response.setList(list);
         ActivityContextDetail detailParam = new ActivityContextDetail();
@@ -111,6 +118,16 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
         List<ActivityContextDetail> details = activityContextDetailMapper.pageList(detailParam);
         response.setContextDetails(details);
         refreshVistNum(request.getId());
+        response.setCurrentUserJoined(0);
+        AuthSession session = VoteContext.session();
+        if (session != null && session.getId() != null && session.getId() > 0) {
+            ActivityDetail param1 = new ActivityDetail();
+            param1.setActivityId(header.getId());
+            param1.setUserId(session.getId());
+            if (activityDetailMapper.pageList(param1).size() > 0) {
+                response.setCurrentUserJoined(1);
+            }
+        }
         return response;
     }
 
@@ -136,12 +153,30 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
         } else if ("status".equals(request.getSortType()) && "0".equals(request.getSortVal())) {
             param.setEnable(0);
         }
-        PageInfo<ActivityHeader> pageInfo = PageHelper.startPage(1, 1000,"sort asc")
+        if ("cateId".equals(request.getSortType())) {
+            param.setActivityType(request.getSortVal());
+        }
+        String sort = "sort asc";
+        if ("sort".equals(request.getSortType())) {
+            switch (request.getSortVal()) {
+                case "user" : sort = "visit_num desc";break;
+                case "cnt" : sort = "vote_num desc";break;
+                case "start" : sort = "start_time asc";break;
+                case "end" : sort = "end_time asc";break;
+                case "new" : sort = "create_time desc";break;
+                default:sort ="sort asc";
+            }
+        }
+        PageInfo<ActivityHeader> pageInfo = PageHelper.startPage(1, 1000,sort)
                 .doSelectPageInfo(() -> activityHeaderMapper.pageList(param));
         PageInfo<VoteResponse> dtoPage = new PageInfo<>();
         BeanUtil.copyProperties(pageInfo,dtoPage);
         List<VoteResponse> voteResponses = Lists.newArrayList();
-        pageInfo.getList().forEach(s -> voteResponses.add(new VoteResponse(s)));
+        pageInfo.getList().forEach(s -> {
+            VoteResponse response = new VoteResponse(s);
+            response.setCheckNum(activityDetailMapper.getNumCheckByActiveId(s.getId()));
+            voteResponses.add(response);
+        });
         dtoPage.setList(voteResponses);
         return dtoPage;
     }
@@ -210,6 +245,21 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
                 !reqIds.contains(s)).collect(Collectors.toList());
         for (Long id : ids) {
             activityDetailMapper.deleteById(id);
+            activityContextDetailMapper.deleteByActivityDetailId(id);
+        }
+        activityContextDetailMapper.deleteByActivityId(activityHeader.getId());
+        List<Object> listDesc = map.get("desc");
+        if (!CollectionUtils.isEmpty(listDesc)) {
+            int orderInt = 0;
+            for (Object obj : listDesc) {
+                ActivityContextDetail detail = JSON.parseObject(JSON.toJSONString(obj),ActivityContextDetail.class);
+                detail.setActivityDetailId(0L);
+                detail.setActivityId(activityHeader.getId());
+                detail.setOrders(++orderInt);
+                detail.setCreateBy("admin");
+                detail.setUpdatedBy("admin");
+                activityContextDetailMapper.insert(detail);
+            }
         }
         for (ActivityDetail detail : request.getItem()) {
             if (detail.getId() != null) {
@@ -263,6 +313,7 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
             detail.setUserId(VoteContext.session().getId());
             detail.setUpdatedBy("admin");
             detail.setCreateBy("admin");
+            detail.setStatus(0);
             detail.setId(null);
             activityDetailMapper.insert(detail);
             int i = 0;
@@ -277,6 +328,83 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
         } finally {
             RedissonLockService.unlock(lock);
         }
+    }
+
+    @Override
+    public ActivityDetailInfoResponse getActiveDetail(ActivityDetailRequest request) {
+        if (request.getId() == null && "edit".equals(request.getType())) {
+            throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0005);
+        }
+        if (request.getActivityDetailId() == null && "check".equals(request.getType())) {
+            throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0005);
+        }
+        ActivityDetail detailParam = new ActivityDetail();
+        if ("edit".equals(request.getType())) {
+            detailParam.setActivityId(request.getId());
+            detailParam.setUserId(VoteContext.session().getId());
+        } else {
+            detailParam.setId(request.getActivityDetailId());
+        }
+        List<ActivityDetail> list = activityDetailMapper.pageList(detailParam);
+        if (CollectionUtils.isEmpty(list)) {
+            throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0014);
+        }
+        ActivityDetail detail = list.get(0);
+        ActivityDetailInfoResponse response = new ActivityDetailInfoResponse();
+        BeanUtil.copyProperties(detail,response);
+        ActivityContextDetail contextDetailParam = new ActivityContextDetail();
+        contextDetailParam.setActivityDetailId(detail.getId());
+        List<ActivityContextDetail> contextDetails = activityContextDetailMapper.pageList(contextDetailParam);
+        response.setForms(contextDetails);
+        return response;
+    }
+
+    @Override
+    public void editActivity(JoinActivityRequest request) {
+        RLock lock = null;
+        try {
+            String lockKey = RedissonLockService.getLockKey("joinActivity",request.getActivityId() + "");
+            lock = RedissonLockService.getAndTryLock(lockKey);
+            ActivityDetail paramDetail = new ActivityDetail();
+            paramDetail.setActivityId(request.getActivityId());
+            paramDetail.setUserId(VoteContext.session().getId());
+            if (activityDetailMapper.pageList(paramDetail).size() <= 0 || request.getId() == null) {
+                throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0014);
+            }
+            ActivityDetail detail = new ActivityDetail();
+            BeanUtil.copyProperties(request,detail);
+            // int num = activityDetailMapper.getMaxNumByActiveId(request.getActivityId());
+            detail.setOrderNum(null);
+            detail.setUserId(null);
+            detail.setVoteNum(null);
+            detail.setActivityId(null);
+            detail.setStatus(0);
+            activityDetailMapper.update(detail);
+            activityContextDetailMapper.deleteByActivityDetailId(detail.getId());
+            int i = 0;
+            for (ActivityContextDetail form : request.getForms()) {
+                form.setActivityId(0L);
+                form.setActivityDetailId(detail.getId());
+                form.setOrders(++i);
+                form.setUpdatedBy("admin");
+                form.setCreateBy("admin");
+                activityContextDetailMapper.insert(form);
+            }
+        } finally {
+            RedissonLockService.unlock(lock);
+        }
+    }
+
+    @Override
+    public Integer checkDetail(ActivityDetailCheckRequest request) {
+        if (request.getId() == null || request.getStatus() == null) {
+            throw VoteExceptionFactory.getException(ErrorEnum.VOTE_ERROR_0005);
+        }
+        ActivityDetail activityDetail = new ActivityDetail();
+        activityDetail.setId(request.getId());
+        activityDetail.setStatus(request.getStatus());
+        activityDetailMapper.update(activityDetail);
+        return 1;
     }
 
     public void refreshPersonNum(ActivityDetail activityDetail,Integer num,Long userId) {
@@ -304,17 +432,19 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
     }
 
     public void refreshVistNum(Long headerId) {
-        RLock lock = null;
-        try {
-            lock = RedissonLockService.getAndTryLock(RedissonLockService.getLockKey("refresh",headerId + ""));
-            ActivityHeader header = activityHeaderMapper.load(headerId);
-            ActivityHeader updateParam = new ActivityHeader();
-            updateParam.setId(headerId);
-            updateParam.setVisitNum(header.getVisitNum() + 1);
-            activityHeaderMapper.update(updateParam);
-        } finally {
-            RedissonLockService.unlockDirectly(lock);
-        }
+        threadPoolTaskExecutor.submit(() -> {
+            RLock lock = null;
+            try {
+                lock = RedissonLockService.getAndTryLock(RedissonLockService.getLockKey("refresh",headerId + ""));
+                ActivityHeader header = activityHeaderMapper.load(headerId);
+                ActivityHeader updateParam = new ActivityHeader();
+                updateParam.setId(headerId);
+                updateParam.setVisitNum(header.getVisitNum() + 1);
+                activityHeaderMapper.update(updateParam);
+            } finally {
+                RedissonLockService.unlockDirectly(lock);
+            }
+        });
     }
 
     public void refreshVoteNum(Long headerId) {

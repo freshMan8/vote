@@ -64,4 +64,6 @@ public interface ActivityDetailMapper {
     Integer getNumByActiveId(Long id);
 
     Integer getMaxNumByActiveId(Long id);
+
+    String getNumCheckByActiveId(Long id);
 }

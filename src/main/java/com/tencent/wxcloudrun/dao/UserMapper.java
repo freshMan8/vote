@@ -2,6 +2,7 @@ package com.tencent.wxcloudrun.dao;
 
 import com.tencent.wxcloudrun.model.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,6 +16,9 @@ import java.util.List;
 public interface UserMapper {
 
     List<User> getEntity(User user);
+
+    List<User> getEntityType(@Param("user") User user, @Param("list")
+            List<Integer> userType);
 
     Integer updateEntity(User user);
 

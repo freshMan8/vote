@@ -24,6 +24,32 @@
         </if>
     </select>
 
+    <select id="getEntityType" resultType="com.tencent.wxcloudrun.model.User">
+        select * from t_user
+        where 1 = 1
+        <if test="user.id != null">
+            and id = #{user.id}
+        </if>
+        <if test="user.account != null and user.account != ''">
+            and account = #{user.account}
+        </if>
+        <if test="user.userName != null and user.userName != ''">
+            and user_name like concat('%',#{user.userName},'%')
+        </if>
+        <if test="user.phoneNum != null and user.phoneNum != ''">
+            and phone_num = #{user.phoneNum}
+        </if>
+        <if test="user.enable != null">
+            and enable = #{user.enable}
+        </if>
+        <if test="list != null and list.size() > 0">
+            and user_type in
+            <foreach collection="list" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
     <update id="updateEntity" parameterType="com.tencent.wxcloudrun.model.User">
         update t_user set
         <if test="account != null and account != ''">

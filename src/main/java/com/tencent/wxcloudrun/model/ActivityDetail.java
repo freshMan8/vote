@@ -72,6 +72,10 @@ public class ActivityDetail implements Serializable {
      */
     private Integer voteNum;
 
+    private Integer status;
+
+    private String rejectReason;
+
     /**
      * 更新时间
      */
