@@ -14,4 +14,6 @@ public class ActivityDetailCheckRequest {
     private Long id;
 
     private Integer status;
+
+    private String rejectReason;
 }

@@ -403,6 +403,7 @@ public class ActivityHeaderServiceImpl implements ActivityHeaderService {
         ActivityDetail activityDetail = new ActivityDetail();
         activityDetail.setId(request.getId());
         activityDetail.setStatus(request.getStatus());
+        activityDetail.setRejectReason(request.getRejectReason());
         activityDetailMapper.update(activityDetail);
         return 1;
     }
