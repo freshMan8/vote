@@ -53,6 +53,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = userList.get(0);
         redisService.set(key,user);
+        redisService.expire(key,24 * 60 * 60);
         return user;
     }
 
