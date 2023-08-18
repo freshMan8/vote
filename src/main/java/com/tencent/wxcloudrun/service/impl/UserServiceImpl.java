@@ -140,7 +140,14 @@ public class UserServiceImpl implements UserService {
         userParam.setId(request.getId());
         userParam.setUserType(request.getType());
         userParam.setUpdatedBy("admin");
-        return userMapper.updateEntity(userParam);
+        userMapper.updateEntity(userParam);
+
+        User userParam1 = new User();
+        userParam1.setId(request.getId());
+        List<User> userList = userMapper.getEntity(userParam1);
+        String key = RedissonLockService.getLockKey(CommonConstant.USER_INFO,userList.get(0).getPhoneNum());
+        redisService.del(key);
+        return 1;
     }
 
 
