@@ -174,7 +174,7 @@
                 status = #{status},
             </if>
             <if test="null != rejectReason and rejectReason != '' ">
-                reject_reason = {rejectReason},
+                reject_reason = #{rejectReason},
             </if>
             <if test="null != updatedTime ">updated_time = #{updatedTime},</if>
             <if test="null != updatedBy and '' != updatedBy">updated_by = #{updatedBy},</if>
@@ -244,7 +244,7 @@
     </select>
 
     <select id="getMaxNumByActiveId" resultType="java.lang.Integer">
-        select max(order_num) from t_activity_detail
+        select ifnull(max(order_num),0) from t_activity_detail
         where activity_id = #{id}
     </select>
 
