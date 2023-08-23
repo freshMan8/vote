@@ -59,6 +59,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUserByPhone(String phone) {
+        String key = RedissonLockService.getLockKey(CommonConstant.USER_INFO,phone);
+        redisService.del(key);
         User dbUser = getUserByPhoneNum(phone);
         if (dbUser == null) {
             User user = new User();
